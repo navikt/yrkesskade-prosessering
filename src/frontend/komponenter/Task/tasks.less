@@ -1,0 +1,107 @@
+.tasks {
+    &__topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.taskpanel {
+    margin: 1rem 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 10rem 1fr 10rem 10rem;
+
+    &__status {
+        grid-area: 1 e("/") 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.FERDIG {
+            background-color: @navGronnLighten20;
+        }
+
+        &.FEILET {
+            background-color: @redErrorLighten20;
+        }
+    }
+
+    &__rekjør {
+        grid-area: 2 e("/") 1;
+    }
+
+    &__innhold {
+        grid-area: 1 e("/") 2 e("/") 3 e("/") 2;
+        padding: 1rem;
+        border-left: 1px solid @navGra20;        
+        width: 100%;
+
+        &--elementer {
+            column-count: 2;
+            width: 90%;
+            
+            @media (max-width: 1200px) {
+                column-count: 1;
+            }
+        }
+    }
+
+    &__lenker {
+        grid-area: 1 e("/") 3;
+        border-right: 1px solid @navGra20;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__metadata {
+        grid-area: 1 e("/") 4;
+        padding: 1rem;
+    }
+
+    &__vislogg {
+        grid-area: 2 e("/") 4;
+    }
+
+    &__logg {
+        border-top: 1px solid @navGra20;
+        grid-area: 3 e("/") 5 e("/") 3 e("/") 1;
+        height: auto;
+        padding: 1rem;
+
+        &--item {
+            display: grid;
+            grid-template-columns: 15rem 1fr;
+            padding-bottom: 1.5rem;
+            word-break: break-all;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+
+            & pre {
+                margin-left: 1rem;
+            }
+
+            &-melding {
+                word-break: break-all;
+                word-wrap: break-word;
+                white-space: pre-wrap;
+                font: inherit;
+                margin: 0;
+            }
+        }
+
+        &.skjul {
+            height: 0;
+            display: none;
+        }
+    }
+}
+
+.taskelement {
+    display: flex;
+
+    & .typo-element {
+        margin-right: .25rem;
+    }
+}
