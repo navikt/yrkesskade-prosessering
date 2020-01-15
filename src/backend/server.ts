@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import Backend from '@navikt/familie-backend';
 import bodyParser from 'body-parser';
 import express from 'express';

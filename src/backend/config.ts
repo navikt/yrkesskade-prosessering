@@ -22,7 +22,7 @@ const hentPassportConfig = () => {
         tenant: '',
     };
 
-    const host = 'familie-ks-mottak-frontend';
+    const host = 'familie-prosessering';
     switch (process.env.ENV) {
         case 'local':
             config = {
@@ -33,21 +33,21 @@ const hentPassportConfig = () => {
                 tenant: 'navq.onmicrosoft.com',
             };
             break;
-        case 'preprod':
+        case 'dev':
             config = {
                 allowHttpForRedirectUrl: false,
                 cookieDomain: `${host}.nais.preprod.local`,
-                logoutUri: `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.nais.preprod.local`,
-                redirectUrl: `https://${host}.nais.preprod.local/auth/openid/callback`,
+                logoutUri: `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https://${host}.dev-adeo.no`,
+                redirectUrl: `https://${host}.dev-adeo.no/auth/openid/callback`,
                 tenant: 'navq.onmicrosoft.com',
             };
             break;
-        case 'production':
+        case 'prod':
             config = {
                 allowHttpForRedirectUrl: false,
                 cookieDomain: `${host}.nais.adeo.no`,
-                logoutUri: `https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.nais.adeo.no`,
-                redirectUrl: `https://${host}.nais.adeo.no/auth/openid/callback`,
+                logoutUri: `https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https://${host}.prod-adeo.no`,
+                redirectUrl: `https://${host}.prod-adeo.no/auth/openid/callback`,
                 tenant: 'navno.onmicrosoft.com',
             };
             break;
@@ -57,8 +57,12 @@ const hentPassportConfig = () => {
 
     return {
         ...config,
-        clientID: process.env.CLIENT_ID ? process.env.CLIENT_ID : 'invalid',
-        clientSecret: process.env.CLIENT_SECRET ? process.env.CLIENT_SECRET : '',
+        clientID: process.env.PROSESSERING_CLIENT_ID
+            ? process.env.PROSESSERING_CLIENT_ID
+            : 'invalid',
+        clientSecret: process.env.PROSESSERING_CLIENT_SECRET
+            ? process.env.PROSESSERING_CLIENT_SECRET
+            : '',
         identityMetadata: `https://login.microsoftonline.com/${config.tenant}/v2.0/.well-known/openid-configuration`,
         tokenURI: `https://login.microsoftonline.com/${config.tenant}/oauth2/v2.0/token`,
         useCookieInsteadOfSession: false,
@@ -69,9 +73,9 @@ const hentPassportConfig = () => {
 // Sett opp config mot felles backend skall
 export const nodeConfig = hentPassportConfig();
 export const sessionConfig: ISessionKonfigurasjon = {
-    cookieSecret: process.env.SESSION_SECRET,
+    cookieSecret: process.env.PROSESSERING_SESSION_SECRET,
     navn: 'familie-ks-mottak',
-    sessionSecret: process.env.SESSION_SECRET,
+    sessionSecret: process.env.PROSESSERING_SESSION_SECRET,
 };
 
 export const saksbehandlerTokenConfig: ITokenRequest = {

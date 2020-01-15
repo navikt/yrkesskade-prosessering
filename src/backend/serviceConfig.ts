@@ -15,9 +15,9 @@ if (process.env.ENV === 'local') {
     };
 } else {
     proxyUrls = {
-        barnetrygd_mottak: 'http://familie-ba-mottak',
-        barnetrygd_sak: 'http://familie-ba-sak',
-        kontantstøtte: 'http://familie-ks-mottak',
+        barnetrygd_mottak: `https://familie-ba-mottak.${process.env.ENV}-fss-pub.nais.io`,
+        barnetrygd_sak: `https://familie-ba-sak.${process.env.ENV}-fss-pub.nais.io`,
+        kontantstøtte: `https://familie-ks-mottak.${process.env.ENV}-fss-pub.nais.io`,
     };
 }
 

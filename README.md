@@ -1,4 +1,4 @@
-# familie-ks-mottak-frontend
+# familie-prosessering
 
 Frontend applikasjon for monitorering og håndtering av mottak for familieområdet
 
@@ -6,7 +6,7 @@ Applikasjonen kan snakke med flere "backends" med konfigurasjon du finner i serv
 Ting du må gjøre for å få frontend til å snakke med din backend:
 1. Legg til config for din app i serviceConfig.ts
 2. Legg til appen som preauthorized i aad-iac repoet.
-3. Legg til scope for azure i vault for familie-ks-mottak-frontend
+3. Legg til scope for azure i vault for familie-prosessering
 4. Implementer interfacene som kreves i backenden. Se familie-ks-mottak for inspirasjon.
 
 # Kom i gang med utvikling
@@ -17,15 +17,9 @@ Ting du må gjøre for å få frontend til å snakke med din backend:
 
 Appen krever en del environment variabler og legges til i .env fila i root på prosjektet.  
 ```
-    CLIENT_ID='<application_id from aad app>'
-    CLIENT_SECRET='<KEY from aad app>'
-    COOKIE_KEY1='<any string of length 32>'
-    COOKIE_KEY2='<any string of length 32>'
-    PASSPORTCOOKIE_KEY1='<any string of length 32>'
-    PASSPORTCOOKIE_KEY2='<any string of length 32>'
-    PASSPORTCOOKIE_KEY3='<any string of length 12>'
-    PASSPORTCOOKIE_KEY4='<any string of length 12>'
-    SESSION_SECRET='<any string of length 32>'
+    PROSESSERING_CLIENT_ID='<application_id from aad app>'
+    PROSESSERING_CLIENT_SECRET='<KEY from aad app>'
+    FAMILIE_SESSION_SECRET='<any string of length 32>'
     
     ENV=local
     APP_VERSION=0.0.1
