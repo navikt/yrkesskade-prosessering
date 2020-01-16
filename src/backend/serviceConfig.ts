@@ -11,12 +11,14 @@ if (process.env.ENV === 'local') {
     proxyUrls = {
         barnetrygd_mottak: 'http://localhost:8090',
         barnetrygd_sak: 'http://localhost:8089',
+        enslig_mottak: 'http://localhost:8092',
         kontantstøtte: 'http://localhost:8084',
     };
 } else {
     proxyUrls = {
         barnetrygd_mottak: `https://familie-ba-mottak.${process.env.ENV}-fss-pub.nais.io`,
         barnetrygd_sak: `https://familie-ba-sak.${process.env.ENV}-fss-pub.nais.io`,
+        enslig_mottak: `https://familie-ef-mottak.${process.env.ENV}-fss-pub.nais.io`,
         kontantstøtte: `https://familie-ks-mottak.${process.env.ENV}-fss-pub.nais.io`,
     };
 }
@@ -42,5 +44,12 @@ export const serviceConfig: IService[] = [
         id: 'familie-ba-sak',
         proxyPath: '/familie-ba-sak/api',
         proxyUrl: proxyUrls.barnetrygd_sak,
+    },
+    {
+        azureScope: process.env.EF_MOTTAK_SCOPE,
+        displayName: 'Alene med barn - mottak',
+        id: 'familie-ef-mottak',
+        proxyPath: '/familie-ef-mottak/api',
+        proxyUrl: proxyUrls.enslig_mottak,
     },
 ];
