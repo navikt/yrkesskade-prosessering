@@ -10,6 +10,7 @@ export enum taskStatus {
     FEILET = 'FEILET',
     FERDIG = 'FERDIG',
     KLAR_TIL_PLUKK = 'KLAR_TIL_PLUKK',
+    MANUELL_OPPFØLGING = 'MANUELL_OPPFØLGING',
     PLUKKET = 'PLUKKET',
     UBEHANDLET = 'UBEHANDLET',
 }
@@ -19,6 +20,7 @@ export enum loggType {
     FEILET = 'FEILET',
     FERDIG = 'FERDIG',
     KLAR_TIL_PLUKK = 'KLAR_TIL_PLUKK',
+    MANUELL_OPPFØLGING = 'MANUELL_OPPFØLGING',
     PLUKKET = 'PLUKKET',
     UBEHANDLET = 'UBEHANDLET',
 }
@@ -32,6 +34,7 @@ export enum taskTyper {
     sendMeldingTilDittNav = 'sendMeldingTilDittNav',
     sendSøknadTilSak = 'sendSøknadTilSak',
     sendTilSak = 'sendTilSak',
+    statusFraOppdrag = 'statusFraOppdrag',
 }
 
 // Tekster
@@ -48,6 +51,7 @@ export const taskTypeTekster: ITaskTypeTekster = {
     sendMeldingTilDittNav: 'Send melding til ditt NAV',
     sendSøknadTilSak: 'Send søknad til sak',
     sendTilSak: 'Send til sak',
+    statusFraOppdrag: 'Hent status fra oppdrag',
 };
 
 type ITaskStatusTekster = {
@@ -60,29 +64,25 @@ export const taskStatusTekster: ITaskStatusTekster = {
     FEILET: 'Feilet',
     FERDIG: 'Ferdig',
     KLAR_TIL_PLUKK: 'Klar til plukk',
+    MANUELL_OPPFØLGING: 'Manuell oppfølging',
     PLUKKET: 'Plukket',
     UBEHANDLET: 'Ubehandlet',
 };
 
 // Interface
-export interface ITaskDTO {
-    task: ITask;
-    journalpostID?: string;
-    saksnummer?: string;
-    søkerFødselsnummer: string;
-}
-
 export interface ITask {
     avvikstype: avvikstyper;
     callId: string;
     id: number;
     logg: ITaskLogg[];
-    metadata: any;
+    metadata: {
+        [key: string]: string;
+    };
     opprettetTidspunkt: string;
     payload: string;
     status: taskStatus;
     triggerTid: string;
-    type: taskTyper;
+    taskStepType: taskTyper;
 }
 
 export interface ITaskLogg {

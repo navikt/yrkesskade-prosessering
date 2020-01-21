@@ -3,10 +3,9 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Select } from 'nav-frontend-skjema';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { useHistory } from 'react-router';
 import { RessursStatus } from '../../typer/ressurs';
 import { IService } from '../../typer/service';
-import { taskStatus } from '../../typer/task';
+import { taskStatus, taskStatusTekster } from '../../typer/task';
 import {
     actions as serviceActions,
     useServiceContext,
@@ -67,10 +66,10 @@ const Tasks: React.FunctionComponent<IProps> = ({ serviceId }) => {
                                 value={statusFilter}
                                 label={'Vis saker med status'}
                             >
-                                {Object.keys(taskStatus).map(status => {
+                                {Object.values(taskStatus).map((status: taskStatus) => {
                                     return (
                                         <option key={status} value={status}>
-                                            {status}
+                                            {taskStatusTekster[status]}
                                         </option>
                                     );
                                 })}
@@ -78,7 +77,7 @@ const Tasks: React.FunctionComponent<IProps> = ({ serviceId }) => {
                         </div>
 
                         <br />
-                        <TaskListe tasksDTO={tasks.data} />
+                        <TaskListe tasks={tasks.data} />
                     </React.Fragment>
                 );
             case RessursStatus.HENTER:
