@@ -13,6 +13,7 @@ export enum taskStatus {
     MANUELL_OPPFØLGING = 'MANUELL_OPPFØLGING',
     PLUKKET = 'PLUKKET',
     UBEHANDLET = 'UBEHANDLET',
+    ALLE = 'ALLE',
 }
 
 export enum loggType {
@@ -67,6 +68,7 @@ export const taskStatusTekster: ITaskStatusTekster = {
     MANUELL_OPPFØLGING: 'Manuell oppfølging',
     PLUKKET: 'Plukket',
     UBEHANDLET: 'Ubehandlet',
+    ALLE: 'Alle',
 };
 
 // Interface
