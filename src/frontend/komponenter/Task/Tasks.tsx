@@ -85,7 +85,7 @@ const Tasks: React.FunctionComponent<IProps> = ({ serviceId }) => {
             case RessursStatus.FEILET:
                 return (
                     <AlertStripe
-                        children={`Innhenting av feilede tasker feilet. Feilmelding: ${tasks.melding}`}
+                        children={`Innhenting av tasker feilet. Feilmelding: ${tasks.melding}`}
                         type={'feil'}
                     />
                 );

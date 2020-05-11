@@ -8,7 +8,7 @@ export const hentTasks = (
     statusFilter: taskStatus
 ): Promise<Ressurs<ITask[]>> => {
     return axiosRequest({
-        headers: {
+        headers: statusFilter !== taskStatus.ALLE && {
             status: statusFilter,
         },
         method: 'GET',
