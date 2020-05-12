@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import * as React from 'react';
+import { useHistory, useLocation, useParams } from 'react-router';
 import { avvikshåndterTask, hentTasks, rekjørTask } from '../api/task';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { IService } from '../typer/service';
@@ -87,14 +88,31 @@ const TaskReducer = (state: IState, action: IAction): IState => {
 };
 
 const TaskProvider: React.StatelessComponent = ({ children }) => {
+    const history = useHistory();
+    const location = useLocation();
+    const queryParamStatusFilter: taskStatus | null = new URLSearchParams(location.search).get(
+        'statusFilter'
+    ) as taskStatus;
+
     const valgtService: IService | undefined = useServiceContext().valgtService;
+    const initiellStatusFilter: taskStatus = queryParamStatusFilter
+        ? queryParamStatusFilter
+        : taskStatus.FEILET;
+
     const [state, dispatch] = React.useReducer(TaskReducer, {
         avvikshåndteringDTO: undefined,
         rekjørAlle: false,
         rekjørId: '',
-        statusFilter: taskStatus.FEILET,
+        statusFilter: initiellStatusFilter,
         tasks: byggTomRessurs<ITask[]>(),
     });
+
+    React.useEffect(() => {
+        history.replace({
+            pathname: location.pathname,
+            search: '?statusFilter=' + state.statusFilter,
+        });
+    }, [state.statusFilter, history]);
 
     const internHentTasks = () => {
         if (valgtService) {
