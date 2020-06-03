@@ -43,7 +43,7 @@
     "loglevel": "^1.6.6",
     "moment": "^2.24.0",
     "nav-frontend-alertstriper": "^3.0.7",
-    "nav-frontend-alertstriper-style": "^2.0.6",
+    "nav-frontend-alertstriper-style": "^2.0.13",
     "nav-frontend-core": "^4.0.11",
     "nav-frontend-ikoner-assets": "^1.0.3",
     "nav-frontend-js-utils": "^1.0.8",
