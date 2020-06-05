@@ -4007,10 +4007,10 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-nav-frontend-alertstriper-style@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.6.tgz#f5a5f20879ec9755f614339c2e6f3ba40af6468a"
-  integrity sha512-9TtDQFZQrSH1bw1xJOLI+Cb2HbV066ZsyyZ08p9/YgW5xiaVP8g9D25boBOV0/953pzol6UTiIvKAhymKTjIPw==
+nav-frontend-alertstriper-style@^2.0.13:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.14.tgz#66edde2d6eb0bbc06051b07080b0444ac08f6503"
+  integrity sha512-2/bXQ2aSbXKFk6K7GQX0IsR7iqLHNtRBccZiejTO6tb5pZ/74L0GBYULxkY3dLAlKr2ImxEPtjora6rYTraYGw==
 
 nav-frontend-alertstriper@^3.0.7:
   version "3.0.7"
