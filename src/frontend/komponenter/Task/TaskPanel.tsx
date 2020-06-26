@@ -6,7 +6,7 @@ import PanelBase from 'nav-frontend-paneler';
 import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { ITask, ITaskLogg, loggType, taskStatusTekster, taskTypeTekster } from '../../typer/task';
-import { actions, useTaskDispatch } from '../TaskProvider';
+import { actions, useTaskContext, useTaskDispatch } from '../TaskProvider';
 import AvvikshåndteringModal from './AvvikshåndteringModal/AvvikshåndteringModal';
 import TaskElement from './TaskElement';
 import { hentTaskLogg } from '../../api/task';
@@ -19,55 +19,34 @@ interface IProps {
 }
 
 // Kan bruke sistKjørt når man gått over helt til v2 av tasks
-const getSistKjørt = (task: ITask) => {
-    const sortertTaskLogg =
-        (task.logg || []).sort((a, b) =>
-            moment(b.opprettetTidspunkt).diff(moment(a.opprettetTidspunkt))
-        ) || [];
-    const behandlerLoggMeldinger = sortertTaskLogg.filter(
-        (taskLogg: ITaskLogg) => taskLogg.type === loggType.BEHANDLER
-    );
-    let sistKjørt: string;
-    if (task.sistKjørt) {
-        sistKjørt = moment(task.sistKjørt).format('DD.MM.YYYY HH:mm');
-    } else if (behandlerLoggMeldinger.length > 0) {
-        sistKjørt = moment(behandlerLoggMeldinger[0].opprettetTidspunkt).format('DD.MM.YYYY HH:mm');
-    } else {
-        sistKjørt = 'Venter på første kjøring';
-    }
-    return { sortertTaskLogg, sistKjørt };
-};
+const getSistKjørt = (task: ITask) =>
+    task.sistKjørt ? moment(task.sistKjørt).format('DD.MM.YYYY HH:mm') : 'Venter på første kjøring';
 
 const TaskPanel: React.StatelessComponent<IProps> = ({ task }) => {
     const valgtService: IService = useServiceContext().valgtService!!;
+    const taskLogg = useTaskContext().logg[task.id];
     const [visAvvikshåndteringModal, settVisAvvikshåndteringModal] = React.useState(false);
+    const [visLogg, settVisLogg] = React.useState(false);
 
     const tasksDispatcher = useTaskDispatch();
 
     const kibanaErrorLenke = `https://logs.adeo.no/app/kibana#/discover/48543ce0-877e-11e9-b511-6967c3e45603?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-apps-*',key:team,negate:!f,params:(query:teamfamilie,type:phrase),type:phrase,value:teamfamilie),query:(match:(team:(query:teamfamilie,type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:level,negate:!f,params:(query:Error,type:phrase),type:phrase,value:Error),query:(match:(level:(query:Error,type:phrase))))),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
     const kibanaInfoLenke = `https://logs.adeo.no/app/kibana#/discover/48543ce0-877e-11e9-b511-6967c3e45603?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-apps-*',key:team,negate:!f,params:(query:teamfamilie,type:phrase),type:phrase,value:teamfamilie),query:(match:(team:(query:teamfamilie,type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:level,negate:!f,params:(query:Info,type:phrase),type:phrase,value:Info),query:(match:(level:(query:Info,type:phrase))))),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
 
-    const { sortertTaskLogg, sistKjørt } = getSistKjørt(task);
+    const sistKjørt = getSistKjørt(task);
 
-    const toggleVisLogg = () => {
-        if (!task.visLogg && !task.logg) {
-            hentTaskLogg(valgtService, task.id).then((response: Ressurs<ITaskLogg[]>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    tasksDispatcher({
-                        payload: {
-                            id: task.id,
-                            data: response.data,
-                        },
-                        type: actions.HENT_TASK_LOGG,
-                    });
-                }
-            });
-        } else {
-            tasksDispatcher({
-                payload: task.id,
-                type: actions.TOGGLE_LOGG,
-            });
-        }
+    const hentLogg = () => {
+        hentTaskLogg(valgtService, task.id).then((response: Ressurs<ITaskLogg[]>) => {
+            if (response.status === RessursStatus.SUKSESS) {
+                tasksDispatcher({
+                    payload: {
+                        id: task.id,
+                        data: response.data,
+                    },
+                    type: actions.HENT_TASK_LOGG,
+                });
+            }
+        });
     };
 
     return (
@@ -123,14 +102,22 @@ const TaskPanel: React.StatelessComponent<IProps> = ({ task }) => {
                 />
             </div>
 
-            <Knapp className={'taskpanel__vislogg'} mini={true} onClick={toggleVisLogg}>
-                {`${task.visLogg ? 'Skjul' : 'Vis'} logg (${
-                    task.antallLogger || task.logg?.length
-                })`}
+            <Knapp
+                className={'taskpanel__vislogg'}
+                mini={true}
+                onClick={(event) => {
+                    if (!taskLogg) {
+                        hentLogg();
+                    }
+                    settVisLogg(!visLogg);
+                    event.preventDefault();
+                }}
+            >
+                {`${visLogg ? 'Skjul' : 'Vis'} logg (${task.antallLogger || task.logg?.length})`}
             </Knapp>
 
-            <div className={classNames('taskpanel__logg', task.visLogg ? '' : 'skjul')}>
-                {sortertTaskLogg.map((logg: ITaskLogg, index: number) => {
+            <div className={classNames('taskpanel__logg', visLogg ? '' : 'skjul')}>
+                {(taskLogg || []).map((logg: ITaskLogg, index: number) => {
                     const stackTrace = hentStackTrace(logg.melding);
 
                     return (

@@ -4,8 +4,16 @@ import { useHistory, useLocation } from 'react-router';
 import { avvikshåndterTask, hentTasks, hentTasks2, rekjørTask } from '../api/task';
 import { byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { IService } from '../typer/service';
-import { IAvvikshåndteringDTO, ITask, ITaskResponse, taskStatus } from '../typer/task';
+import {
+    IAvvikshåndteringDTO,
+    ITask,
+    ITaskLogg,
+    ITaskLogger,
+    ITaskResponse,
+    taskStatus,
+} from '../typer/task';
 import { useServiceContext } from './ServiceProvider';
+import * as moment from 'moment';
 
 export enum actions {
     AVVIKSHÅNDTER_TASK = 'AVVIKSHÅNDTER_TASK',
@@ -16,7 +24,6 @@ export enum actions {
     REKJØR_TASK = 'REKJØR_TASK',
     SETT_FILTER = 'SETT_FILTER',
     HENT_TASK_LOGG = 'HENT_TASK_LOGG',
-    TOGGLE_LOGG = 'TOGGLE_LOGG',
 }
 
 interface IAction {
@@ -32,6 +39,7 @@ interface IState {
     rekjørId: string;
     statusFilter: taskStatus;
     tasks: Ressurs<ITaskResponse>;
+    logg: ITaskLogger;
 }
 
 const TaskStateContext = React.createContext<IState | undefined>(undefined);
@@ -56,7 +64,8 @@ const TaskReducer = (state: IState, action: IAction): IState => {
         case actions.HENT_TASKS_SUKSESS: {
             return {
                 ...state,
-                tasks: action.payload,
+                tasks: action.payload.tasks,
+                logg: action.payload.logg,
             };
         }
         case actions.HENT_TASKS_FEILET: {
@@ -83,43 +92,13 @@ const TaskReducer = (state: IState, action: IAction): IState => {
                 statusFilter: action.payload,
             };
         }
-        case actions.TOGGLE_LOGG: {
-            if (state.tasks.status === RessursStatus.SUKSESS) {
-                return {
-                    ...state,
-                    tasks: {
-                        ...state.tasks,
-                        data: {
-                            ...state.tasks.data,
-                            tasks: state.tasks.data.tasks.map((task) => {
-                                if (task.id === action.payload) {
-                                    task.visLogg = !task.visLogg;
-                                }
-                                return task;
-                            }),
-                        },
-                    },
-                };
-            } else {
-                return state;
-            }
-        }
         case actions.HENT_TASK_LOGG: {
             if (state.tasks.status === RessursStatus.SUKSESS) {
                 return {
                     ...state,
-                    tasks: {
-                        ...state.tasks,
-                        data: {
-                            ...state.tasks.data,
-                            tasks: state.tasks.data.tasks.map((task) => {
-                                if (task.id === action.payload.id) {
-                                    task.logg = action.payload.data;
-                                    task.visLogg = true;
-                                }
-                                return task;
-                            }),
-                        },
+                    logg: {
+                        ...state.logg,
+                        [action.payload.id]: action.payload.data,
                     },
                 };
             } else {
@@ -150,6 +129,7 @@ const TaskProvider: React.StatelessComponent = ({ children }) => {
         rekjørId: '',
         statusFilter: initiellStatusFilter,
         tasks: byggTomRessurs<ITaskResponse>(),
+        logg: {},
     });
 
     React.useEffect(() => {
@@ -165,23 +145,56 @@ const TaskProvider: React.StatelessComponent = ({ children }) => {
                 (response: Ressurs<ITaskResponse>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         dispatch({
-                            payload: response,
+                            payload: {
+                                tasks: response,
+                                logg: byggTomRessurs<ITaskLogger>(),
+                            },
                             type: actions.HENT_TASKS_SUKSESS,
                         });
                     } else {
                         hentTasks(valgtService, state.statusFilter).then(
                             (responseV1: Ressurs<ITask[]>) => {
-                                const data =
-                                    responseV1.status === RessursStatus.SUKSESS
-                                        ? {
-                                              ...responseV1,
-                                              data: { tasks: responseV1.data },
-                                          }
-                                        : responseV1;
-                                dispatch({
-                                    payload: data,
-                                    type: actions.HENT_TASKS_SUKSESS,
-                                });
+                                if (responseV1.status === RessursStatus.SUKSESS) {
+                                    const getLogg = (logger?: ITaskLogg[]) => {
+                                        if (logger && logger.length > 0) {
+                                            return moment(logger[0].opprettetTidspunkt).format(
+                                                'DD.MM.YYYY HH:mm'
+                                            );
+                                        } else {
+                                            return 'Venter på første kjøring';
+                                        }
+                                    };
+                                    const logg: ITaskLogger = responseV1.data.reduce(
+                                        (map, task) => {
+                                            // @ts-ignore
+                                            map[task.id] = task.logg.sort((a, b) =>
+                                                moment(b.opprettetTidspunkt).diff(
+                                                    moment(a.opprettetTidspunkt)
+                                                )
+                                            );
+                                            return map;
+                                        },
+                                        {}
+                                    );
+                                    const tasks = {
+                                        ...responseV1,
+                                        data: {
+                                            tasks: responseV1.data.map((task) => ({
+                                                ...task,
+                                                sistKjørt: getLogg(logg[task.id]),
+                                            })),
+                                        },
+                                    };
+                                    dispatch({
+                                        payload: {
+                                            tasks,
+                                            logg,
+                                        },
+                                        type: actions.HENT_TASKS_SUKSESS,
+                                    });
+                                } else {
+                                    // eventuell feilhåndtering
+                                }
                             }
                         );
                     }
