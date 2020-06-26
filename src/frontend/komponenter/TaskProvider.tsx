@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
 import * as React from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
-import { avvikshåndterTask, hentTasks, rekjørTask } from '../api/task';
-import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import { useHistory, useLocation } from 'react-router';
+import { avvikshåndterTask, hentTasks, hentTasks2, rekjørTask } from '../api/task';
+import { byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { IService } from '../typer/service';
-import { IAvvikshåndteringDTO, ITask, taskStatus } from '../typer/task';
+import { IAvvikshåndteringDTO, ITask, ITaskResponse, taskStatus } from '../typer/task';
 import { useServiceContext } from './ServiceProvider';
 
 export enum actions {
@@ -15,6 +15,8 @@ export enum actions {
     REKJØR_ALLE_TASKS = 'REKJØR_ALLE_TASKS',
     REKJØR_TASK = 'REKJØR_TASK',
     SETT_FILTER = 'SETT_FILTER',
+    HENT_TASK_LOGG = 'HENT_TASK_LOGG',
+    TOGGLE_LOGG = 'TOGGLE_LOGG',
 }
 
 interface IAction {
@@ -29,7 +31,7 @@ interface IState {
     rekjørAlle: boolean;
     rekjørId: string;
     statusFilter: taskStatus;
-    tasks: Ressurs<ITask[]>;
+    tasks: Ressurs<ITaskResponse>;
 }
 
 const TaskStateContext = React.createContext<IState | undefined>(undefined);
@@ -81,6 +83,49 @@ const TaskReducer = (state: IState, action: IAction): IState => {
                 statusFilter: action.payload,
             };
         }
+        case actions.TOGGLE_LOGG: {
+            if (state.tasks.status === RessursStatus.SUKSESS) {
+                return {
+                    ...state,
+                    tasks: {
+                        ...state.tasks,
+                        data: {
+                            ...state.tasks.data,
+                            tasks: state.tasks.data.tasks.map((task) => {
+                                if (task.id === action.payload) {
+                                    task.visLogg = !task.visLogg;
+                                }
+                                return task;
+                            }),
+                        },
+                    },
+                };
+            } else {
+                return state;
+            }
+        }
+        case actions.HENT_TASK_LOGG: {
+            if (state.tasks.status === RessursStatus.SUKSESS) {
+                return {
+                    ...state,
+                    tasks: {
+                        ...state.tasks,
+                        data: {
+                            ...state.tasks.data,
+                            tasks: state.tasks.data.tasks.map((task) => {
+                                if (task.id === action.payload.id) {
+                                    task.logg = action.payload.data;
+                                    task.visLogg = true;
+                                }
+                                return task;
+                            }),
+                        },
+                    },
+                };
+            } else {
+                return state;
+            }
+        }
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);
         }
@@ -104,7 +149,7 @@ const TaskProvider: React.StatelessComponent = ({ children }) => {
         rekjørAlle: false,
         rekjørId: '',
         statusFilter: initiellStatusFilter,
-        tasks: byggTomRessurs<ITask[]>(),
+        tasks: byggTomRessurs<ITaskResponse>(),
     });
 
     React.useEffect(() => {
@@ -116,19 +161,32 @@ const TaskProvider: React.StatelessComponent = ({ children }) => {
 
     const internHentTasks = () => {
         if (valgtService) {
-            hentTasks(valgtService, state.statusFilter)
-                .then((tasks: Ressurs<ITask[]>) => {
-                    dispatch({
-                        payload: tasks,
-                        type: actions.HENT_TASKS_SUKSESS,
-                    });
-                })
-                .catch((error: AxiosError) => {
-                    dispatch({
-                        payload: byggFeiletRessurs('Ukent feil ved innhenting av Task', error),
-                        type: actions.HENT_TASKS_FEILET,
-                    });
-                });
+            hentTasks2(valgtService, state.statusFilter).then(
+                (response: Ressurs<ITaskResponse>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        dispatch({
+                            payload: response,
+                            type: actions.HENT_TASKS_SUKSESS,
+                        });
+                    } else {
+                        hentTasks(valgtService, state.statusFilter).then(
+                            (responseV1: Ressurs<ITask[]>) => {
+                                const data =
+                                    responseV1.status === RessursStatus.SUKSESS
+                                        ? {
+                                              ...responseV1,
+                                              data: { tasks: responseV1.data },
+                                          }
+                                        : responseV1;
+                                dispatch({
+                                    payload: data,
+                                    type: actions.HENT_TASKS_SUKSESS,
+                                });
+                            }
+                        );
+                    }
+                }
+            );
         }
     };
 

@@ -5,7 +5,7 @@ const fs = require('fs');
 const delayMs = 20;
 const app = express();
 
-const lesMockFil = filnavn => {
+const lesMockFil = (filnavn) => {
     try {
         return fs.readFileSync(path.join(__dirname, '/mock/' + filnavn), 'UTF-8');
     } catch (err) {
@@ -15,6 +15,15 @@ const lesMockFil = filnavn => {
 
 app.get('/familie-ks-mottak/api/task', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`tasks-feilede.json`)), delayMs);
+});
+
+app.get('/familie-ks-mottak/api/v2/task', (req, res) => {
+    //res.status(500).send()
+    setTimeout(() => res.send(lesMockFil(`tasks-feilede2.json`)), delayMs);
+});
+
+app.get('/familie-ks-mottak/api/task/logg/:id', (req, res) => {
+    setTimeout(() => res.send(lesMockFil(`tasks-logg.json`)), delayMs);
 });
 
 app.get('/user/profile', (req, res) => {
