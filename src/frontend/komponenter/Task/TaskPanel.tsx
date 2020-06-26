@@ -49,6 +49,27 @@ const TaskPanel: React.StatelessComponent<IProps> = ({ task }) => {
 
     const { sortertTaskLogg, sistKjørt } = getSistKjørt(task);
 
+    const toggleVisLogg = () => {
+        if (!task.visLogg && !task.logg) {
+            hentTaskLogg(valgtService, task.id).then((response: Ressurs<ITaskLogg[]>) => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    tasksDispatcher({
+                        payload: {
+                            id: task.id,
+                            data: response.data,
+                        },
+                        type: actions.HENT_TASK_LOGG,
+                    });
+                }
+            });
+        } else {
+            tasksDispatcher({
+                payload: task.id,
+                type: actions.TOGGLE_LOGG,
+            });
+        }
+    };
+
     return (
         <PanelBase className={'taskpanel'} border={true}>
             <AvvikshåndteringModal
@@ -102,32 +123,7 @@ const TaskPanel: React.StatelessComponent<IProps> = ({ task }) => {
                 />
             </div>
 
-            <Knapp
-                className={'taskpanel__vislogg'}
-                mini={true}
-                onClick={() => {
-                    if (!task.visLogg && !task.logg) {
-                        hentTaskLogg(valgtService, task.id).then(
-                            (response: Ressurs<ITaskLogg[]>) => {
-                                if (response.status === RessursStatus.SUKSESS) {
-                                    tasksDispatcher({
-                                        payload: {
-                                            id: task.id,
-                                            data: response.data,
-                                        },
-                                        type: actions.HENT_TASK_LOGG,
-                                    });
-                                }
-                            }
-                        );
-                    } else {
-                        tasksDispatcher({
-                            payload: task.id,
-                            type: actions.TOGGLE_LOGG,
-                        });
-                    }
-                }}
-            >
+            <Knapp className={'taskpanel__vislogg'} mini={true} onClick={toggleVisLogg}>
                 {`${task.visLogg ? 'Skjul' : 'Vis'} logg (${
                     task.antallLogger || task.logg?.length
                 })`}
