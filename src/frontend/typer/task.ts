@@ -76,7 +76,7 @@ export interface ITask {
     avvikstype: avvikstyper;
     callId: string;
     id: number;
-    logg: ITaskLogg[];
+    logg?: ITaskLogg[]; // Kan slettes når man går over til v2
     metadata: {
         [key: string]: string;
     };
@@ -85,6 +85,18 @@ export interface ITask {
     status: taskStatus;
     triggerTid: string;
     taskStepType: taskTyper;
+    antallLogger?: number;
+    sistKjørt?: string;
+    visLogg?: boolean;
+}
+
+// Muliggjør for fremtidlig pagination
+export interface ITaskResponse {
+    tasks: ITask[];
+}
+
+export interface ITaskLogger {
+    [Key: number]: ITaskLogg[];
 }
 
 export interface ITaskLogg {

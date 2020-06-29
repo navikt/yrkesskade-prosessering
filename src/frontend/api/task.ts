@@ -1,6 +1,6 @@
 import { Ressurs } from '../typer/ressurs';
 import { IService } from '../typer/service';
-import { IAvvikshåndteringDTO, ITask, taskStatus } from '../typer/task';
+import { IAvvikshåndteringDTO, ITask, ITaskResponse, ITaskLogg, taskStatus } from '../typer/task';
 import { axiosRequest } from './axios';
 
 export const hentTasks = (
@@ -13,6 +13,26 @@ export const hentTasks = (
         },
         method: 'GET',
         url: `${valgtService.proxyPath}/task`,
+    });
+};
+
+export const hentTasks2 = (
+    valgtService: IService,
+    statusFilter: taskStatus
+): Promise<Ressurs<ITaskResponse>> => {
+    return axiosRequest({
+        params: statusFilter !== taskStatus.ALLE && {
+            status: statusFilter,
+        },
+        method: 'GET',
+        url: `${valgtService.proxyPath}/v2/task`,
+    });
+};
+
+export const hentTaskLogg = (valgtService: IService, id: number): Promise<Ressurs<ITaskLogg[]>> => {
+    return axiosRequest({
+        method: 'GET',
+        url: `${valgtService.proxyPath}/task/logg/${id}`,
     });
 };
 

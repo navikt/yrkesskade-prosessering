@@ -37,6 +37,7 @@ const Tasks: React.FunctionComponent<IProps> = ({ serviceId }) => {
     } else {
         switch (tasks.status) {
             case RessursStatus.SUKSESS:
+                // @ts-ignore
                 return (
                     <React.Fragment>
                         <div className={'tasks__topbar'}>
@@ -57,7 +58,7 @@ const Tasks: React.FunctionComponent<IProps> = ({ serviceId }) => {
                             )}
 
                             <Select
-                                onChange={event =>
+                                onChange={(event) =>
                                     tasksDispatcher({
                                         payload: event.target.value,
                                         type: taskActions.SETT_FILTER,
@@ -77,7 +78,7 @@ const Tasks: React.FunctionComponent<IProps> = ({ serviceId }) => {
                         </div>
 
                         <br />
-                        <TaskListe tasks={tasks.data} />
+                        <TaskListe tasks={tasks.data.tasks} />
                     </React.Fragment>
                 );
             case RessursStatus.HENTER:

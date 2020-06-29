@@ -1,11 +1,19 @@
 import { AxiosError } from 'axios';
 import * as React from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
-import { avvikshåndterTask, hentTasks, rekjørTask } from '../api/task';
-import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import { useHistory, useLocation } from 'react-router';
+import { avvikshåndterTask, hentTasks, hentTasks2, rekjørTask } from '../api/task';
+import { byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { IService } from '../typer/service';
-import { IAvvikshåndteringDTO, ITask, taskStatus } from '../typer/task';
+import {
+    IAvvikshåndteringDTO,
+    ITask,
+    ITaskLogg,
+    ITaskLogger,
+    ITaskResponse,
+    taskStatus,
+} from '../typer/task';
 import { useServiceContext } from './ServiceProvider';
+import * as moment from 'moment';
 
 export enum actions {
     AVVIKSHÅNDTER_TASK = 'AVVIKSHÅNDTER_TASK',
@@ -15,6 +23,7 @@ export enum actions {
     REKJØR_ALLE_TASKS = 'REKJØR_ALLE_TASKS',
     REKJØR_TASK = 'REKJØR_TASK',
     SETT_FILTER = 'SETT_FILTER',
+    HENT_TASK_LOGG = 'HENT_TASK_LOGG',
 }
 
 interface IAction {
@@ -29,7 +38,8 @@ interface IState {
     rekjørAlle: boolean;
     rekjørId: string;
     statusFilter: taskStatus;
-    tasks: Ressurs<ITask[]>;
+    tasks: Ressurs<ITaskResponse>;
+    logg: ITaskLogger;
 }
 
 const TaskStateContext = React.createContext<IState | undefined>(undefined);
@@ -54,7 +64,8 @@ const TaskReducer = (state: IState, action: IAction): IState => {
         case actions.HENT_TASKS_SUKSESS: {
             return {
                 ...state,
-                tasks: action.payload,
+                tasks: action.payload.tasks,
+                logg: action.payload.logg,
             };
         }
         case actions.HENT_TASKS_FEILET: {
@@ -81,6 +92,19 @@ const TaskReducer = (state: IState, action: IAction): IState => {
                 statusFilter: action.payload,
             };
         }
+        case actions.HENT_TASK_LOGG: {
+            if (state.tasks.status === RessursStatus.SUKSESS) {
+                return {
+                    ...state,
+                    logg: {
+                        ...state.logg,
+                        [action.payload.id]: action.payload.data,
+                    },
+                };
+            } else {
+                return state;
+            }
+        }
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);
         }
@@ -104,7 +128,8 @@ const TaskProvider: React.StatelessComponent = ({ children }) => {
         rekjørAlle: false,
         rekjørId: '',
         statusFilter: initiellStatusFilter,
-        tasks: byggTomRessurs<ITask[]>(),
+        tasks: byggTomRessurs<ITaskResponse>(),
+        logg: {},
     });
 
     React.useEffect(() => {
@@ -116,19 +141,65 @@ const TaskProvider: React.StatelessComponent = ({ children }) => {
 
     const internHentTasks = () => {
         if (valgtService) {
-            hentTasks(valgtService, state.statusFilter)
-                .then((tasks: Ressurs<ITask[]>) => {
-                    dispatch({
-                        payload: tasks,
-                        type: actions.HENT_TASKS_SUKSESS,
-                    });
-                })
-                .catch((error: AxiosError) => {
-                    dispatch({
-                        payload: byggFeiletRessurs('Ukent feil ved innhenting av Task', error),
-                        type: actions.HENT_TASKS_FEILET,
-                    });
-                });
+            hentTasks2(valgtService, state.statusFilter).then(
+                (response: Ressurs<ITaskResponse>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        dispatch({
+                            payload: {
+                                tasks: response,
+                                logg: byggTomRessurs<ITaskLogger>(),
+                            },
+                            type: actions.HENT_TASKS_SUKSESS,
+                        });
+                    } else {
+                        hentTasks(valgtService, state.statusFilter).then(
+                            (responseV1: Ressurs<ITask[]>) => {
+                                if (responseV1.status === RessursStatus.SUKSESS) {
+                                    const getLogg = (logger?: ITaskLogg[]) => {
+                                        if (logger && logger.length > 0) {
+                                            return moment(logger[0].opprettetTidspunkt).format(
+                                                'DD.MM.YYYY HH:mm'
+                                            );
+                                        } else {
+                                            return 'Venter på første kjøring';
+                                        }
+                                    };
+                                    const logg: ITaskLogger = responseV1.data.reduce(
+                                        (map, task) => {
+                                            // @ts-ignore
+                                            map[task.id] = task.logg.sort((a, b) =>
+                                                moment(b.opprettetTidspunkt).diff(
+                                                    moment(a.opprettetTidspunkt)
+                                                )
+                                            );
+                                            return map;
+                                        },
+                                        {}
+                                    );
+                                    const tasks = {
+                                        ...responseV1,
+                                        data: {
+                                            tasks: responseV1.data.map((task) => ({
+                                                ...task,
+                                                sistKjørt: getLogg(logg[task.id]),
+                                            })),
+                                        },
+                                    };
+                                    dispatch({
+                                        payload: {
+                                            tasks,
+                                            logg,
+                                        },
+                                        type: actions.HENT_TASKS_SUKSESS,
+                                    });
+                                } else {
+                                    // eventuell feilhåndtering
+                                }
+                            }
+                        );
+                    }
+                }
+            );
         }
     };
 
