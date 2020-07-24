@@ -59,7 +59,7 @@ const Service = (service: IService, dispatch: Dispatch, history: any) => {
                             payload: service,
                             type: actions.SETT_VALGT_SERVICE,
                         });
-                        history.push(`/service/gruppert/${service.id}`);
+                        history.push(`/service/${service.id}/gruppert`);
                     }}
                     mini={true}
                 >

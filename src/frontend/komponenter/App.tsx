@@ -32,40 +32,33 @@ const App: React.FunctionComponent = () => {
                 }}
             />
             <div className={'container'}>
-                <Switch>
-                    <Route exact={true} path={'/'} component={Services} />
-                    <Route
-                        path="/service/:service"
-                        render={() => {
-                            return (
-                                <ServiceProvider>
-                                    <Route
-                                        exact={true}
-                                        path="/service/:service"
-                                        render={({ match }) => {
-                                            return (
-                                                <TaskProvider>
-                                                    <Tasks />
-                                                </TaskProvider>
-                                            );
-                                        }}
-                                    />
-                                    <Route
-                                        exact={true}
-                                        path="/service/:service/gruppert"
-                                        render={({ match }) => {
-                                            return (
-                                                <TaskProvider>
-                                                    <GruppertTasks />
-                                                </TaskProvider>
-                                            );
-                                        }}
-                                    />
-                                </ServiceProvider>
-                            );
-                        }}
-                    />
-                </Switch>
+                <ServiceProvider>
+                    <Switch>
+                        <Route exact={true} path={'/'} component={Services} />
+                        <Route
+                            exact={true}
+                            path="/service/:service"
+                            render={({ match }) => {
+                                return (
+                                    <TaskProvider>
+                                        <Tasks />
+                                    </TaskProvider>
+                                );
+                            }}
+                        />
+                        <Route
+                            exact={true}
+                            path="/service/:service/gruppert"
+                            render={({ match }) => {
+                                return (
+                                    <TaskProvider>
+                                        <GruppertTasks />
+                                    </TaskProvider>
+                                );
+                            }}
+                        />
+                    </Switch>
+                </ServiceProvider>
             </div>
         </Router>
     );

@@ -62,8 +62,7 @@ const ServiceReducer = (state: IState, action: IAction): IState => {
 };
 
 const ServiceProvider: React.StatelessComponent = ({ children }) => {
-    const { service } = useParams();
-    const serviceId = service;
+    const serviceId = useHistory().location.pathname.split('/')[2];
 
     const [state, dispatch] = React.useReducer(ServiceReducer, {
         services: byggTomRessurs<IService[]>(),
