@@ -2,26 +2,19 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useTaskContext, useTaskDispatch, actions as taskActions } from '../../TaskProvider';
 import { IService } from '../../../typer/service';
-import {
-    useServiceContext,
-    useServiceDispatch,
-    actions as serviceActions,
-} from '../../ServiceProvider';
+import { useServiceContext } from '../../ServiceProvider';
 import { taskStatus, taskStatusTekster } from '../../../typer/task';
 import { Knapp } from 'nav-frontend-knapper';
 import { Select } from 'nav-frontend-skjema';
-import { RessursStatus } from '../../../typer/ressurs';
 
 const TopBar: React.FC = () => {
     const statusFilter = useTaskContext().statusFilter;
     const tasksDispatcher = useTaskDispatch();
     const valgtService: IService | undefined = useServiceContext().valgtService;
-    const serviceDispatch = useServiceDispatch();
-    const services = useServiceContext().services;
 
     return (
         <div className={'topbar'}>
-            <Systemtittel children={`Tasks for ${valgtService.displayName}`} />
+            <Systemtittel children={`Tasks for ${valgtService ? valgtService.displayName : ''}`} />
 
             {statusFilter === taskStatus.FEILET && (
                 <Knapp

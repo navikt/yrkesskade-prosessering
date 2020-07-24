@@ -140,7 +140,7 @@ const TaskProvider: React.FC = ({ children }) => {
 
     React.useEffect(() => {
         internHentTasks();
-    }, [valgtService]);
+    }, [state.statusFilter, valgtService]);
 
     const internHentTasks = () => {
         if (valgtService && state.statusFilter) {
