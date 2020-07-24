@@ -1,98 +1,35 @@
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import { Select } from 'nav-frontend-skjema';
-import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { RessursStatus } from '../../typer/ressurs';
-import { IService } from '../../typer/service';
-import { taskStatus, taskStatusTekster } from '../../typer/task';
-import {
-    actions as serviceActions,
-    useServiceContext,
-    useServiceDispatch,
-} from '../ServiceProvider';
-import { actions as taskActions, useTaskContext, useTaskDispatch } from '../TaskProvider';
+import { useTaskContext } from '../TaskProvider';
 import TaskListe from './TaskListe';
+import TopBar from '../Felleskomponenter/TopBar/TopBar';
 
-interface IProps {
-    serviceId: string;
-}
-
-const Tasks: React.FunctionComponent<IProps> = ({ serviceId }) => {
+const Tasks: React.FunctionComponent = () => {
     const tasks = useTaskContext().tasks;
-    const statusFilter = useTaskContext().statusFilter;
-    const tasksDispatcher = useTaskDispatch();
-    const valgtService: IService | undefined = useServiceContext().valgtService;
-    const serviceDispatch = useServiceDispatch();
-    const services = useServiceContext().services;
 
-    if (valgtService === undefined) {
-        if (services.status === RessursStatus.SUKSESS) {
-            serviceDispatch({
-                payload: services.data.find((service: IService) => service.id === serviceId),
-                type: serviceActions.SETT_VALGT_SERVICE,
-            });
-        }
-        return <div />;
-    } else {
-        switch (tasks.status) {
-            case RessursStatus.SUKSESS:
-                // @ts-ignore
-                return (
-                    <React.Fragment>
-                        <div className={'tasks__topbar'}>
-                            <Systemtittel children={`Tasks for ${valgtService.displayName}`} />
+    switch (tasks.status) {
+        case RessursStatus.SUKSESS:
+            // @ts-ignore
+            return (
+                <div className={'tasks'}>
+                    <TopBar />
 
-                            {statusFilter === taskStatus.FEILET && (
-                                <Knapp
-                                    mini={true}
-                                    onClick={() =>
-                                        tasksDispatcher({
-                                            payload: true,
-                                            type: taskActions.REKJØR_ALLE_TASKS,
-                                        })
-                                    }
-                                >
-                                    Rekjør alle tasks
-                                </Knapp>
-                            )}
-
-                            <Select
-                                onChange={(event) =>
-                                    tasksDispatcher({
-                                        payload: event.target.value,
-                                        type: taskActions.SETT_FILTER,
-                                    })
-                                }
-                                value={statusFilter}
-                                label={'Vis saker med status'}
-                            >
-                                {Object.values(taskStatus).map((status: taskStatus) => {
-                                    return (
-                                        <option key={status} value={status}>
-                                            {taskStatusTekster[status]}
-                                        </option>
-                                    );
-                                })}
-                            </Select>
-                        </div>
-
-                        <br />
-                        <TaskListe tasks={tasks.data.tasks} />
-                    </React.Fragment>
-                );
-            case RessursStatus.HENTER:
-                return <AlertStripe children={`Laster tasker`} type={'info'} />;
-            case RessursStatus.FEILET:
-                return (
-                    <AlertStripe
-                        children={`Innhenting av tasker feilet. Feilmelding: ${tasks.melding}`}
-                        type={'feil'}
-                    />
-                );
-            default:
-                return <div />;
-        }
+                    <br />
+                    <TaskListe tasks={tasks.data.tasks} />
+                </div>
+            );
+        case RessursStatus.HENTER:
+            return <AlertStripe children={`Laster tasker`} type={'info'} />;
+        case RessursStatus.FEILET:
+            return (
+                <AlertStripe
+                    children={`Innhenting av tasker feilet. Feilmelding: ${tasks.melding}`}
+                    type={'feil'}
+                />
+            );
+        default:
+            return <div />;
     }
 };
 

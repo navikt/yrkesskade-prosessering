@@ -37,7 +37,7 @@ interface IState {
     avvikshåndteringDTO: IAvvikshåndteringDTO | undefined;
     rekjørAlle: boolean;
     rekjørId: string;
-    statusFilter: taskStatus;
+    statusFilter?: taskStatus;
     tasks: Ressurs<ITaskResponse>;
     logg: ITaskLogger;
 }
@@ -111,36 +111,40 @@ const TaskReducer = (state: IState, action: IAction): IState => {
     }
 };
 
-const TaskProvider: React.StatelessComponent = ({ children }) => {
+const TaskProvider: React.FC = ({ children }) => {
     const history = useHistory();
     const location = useLocation();
-    const queryParamStatusFilter: taskStatus | null = new URLSearchParams(location.search).get(
+
+    const queryParamStatusFilter = new URLSearchParams(location.search).get(
         'statusFilter'
     ) as taskStatus;
 
     const valgtService: IService | undefined = useServiceContext().valgtService;
-    const initiellStatusFilter: taskStatus = queryParamStatusFilter
-        ? queryParamStatusFilter
-        : taskStatus.FEILET;
-
     const [state, dispatch] = React.useReducer(TaskReducer, {
         avvikshåndteringDTO: undefined,
         rekjørAlle: false,
+        statusFilter: queryParamStatusFilter ? queryParamStatusFilter : taskStatus.FEILET,
         rekjørId: '',
-        statusFilter: initiellStatusFilter,
         tasks: byggTomRessurs<ITaskResponse>(),
         logg: {},
     });
 
     React.useEffect(() => {
-        history.replace({
-            pathname: location.pathname,
-            search: '?statusFilter=' + state.statusFilter,
-        });
+        if (queryParamStatusFilter !== state.statusFilter) {
+            history.replace({
+                pathname: location.pathname,
+                search: '?statusFilter=' + state.statusFilter,
+            });
+        }
     }, [state.statusFilter, history]);
 
+    React.useEffect(() => {
+        internHentTasks();
+    }, [valgtService]);
+
     const internHentTasks = () => {
-        if (valgtService) {
+        if (valgtService && state.statusFilter) {
+            dispatch({ type: actions.HENT_TASKS });
             hentTasks2(valgtService, state.statusFilter).then(
                 (response: Ressurs<ITaskResponse>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -151,7 +155,7 @@ const TaskProvider: React.StatelessComponent = ({ children }) => {
                             },
                             type: actions.HENT_TASKS_SUKSESS,
                         });
-                    } else {
+                    } else if (state.statusFilter) {
                         hentTasks(valgtService, state.statusFilter).then(
                             (responseV1: Ressurs<ITask[]>) => {
                                 if (responseV1.status === RessursStatus.SUKSESS) {
@@ -202,12 +206,7 @@ const TaskProvider: React.StatelessComponent = ({ children }) => {
     };
 
     React.useEffect(() => {
-        dispatch({ type: actions.HENT_TASKS });
-        internHentTasks();
-    }, [state.statusFilter, valgtService]);
-
-    React.useEffect(() => {
-        if (valgtService && (state.rekjørAlle || state.rekjørId !== '')) {
+        if (valgtService && (state.rekjørAlle || state.rekjørId !== '') && state.statusFilter) {
             rekjørTask(valgtService, state.statusFilter, !state.rekjørAlle ? state.rekjørId : '')
                 .then(() => {
                     internHentTasks();

@@ -1,0 +1,67 @@
+.gruppert-tasks {
+    & .typo-systemtittel {
+        padding: 1rem 0 0 1rem;
+    }
+
+    &__container {
+        border-top: 2px solid black;
+        display: flex;
+        height: calc(100vh - 10.5rem);
+
+        &--venstremeny {
+            min-width: 10rem;
+            border-right: 2px solid @navGra40;
+            overflow: hidden;
+
+            .venstremeny {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                background: white;
+                padding: 2rem 0;
+                height: 100%;
+                max-width: 20rem;
+                min-width: 10rem;
+                border-right: 2px solid @navGra40;
+                overflow: hidden;
+                
+                .FEILET {
+                    border-left: .5rem solid @redErrorLighten20;
+                }
+    
+                .OK {
+                    border-left: .5rem solid @navGronnLighten20;
+                }
+    
+                &__link {
+                    text-decoration: none;
+                    padding: 0.5rem 3rem 0.5rem 2rem;
+                    color: @navGra80;
+            
+                    &:hover {
+                        background: @navLysGra;
+                    }
+            
+                    &.active {
+                        background: @navGra20;
+                    }
+                    
+                    &:focus {
+                        box-shadow: 0 0 0 3px @fokusFarge;
+                        outline: none;
+                    }
+                    
+                    &:focus {
+                        z-index: 1000;
+                    }
+                }
+            }
+        }
+
+        &--main {
+            flex: 1;
+            overflow: auto;
+            padding: 1rem;
+        }
+    }
+}

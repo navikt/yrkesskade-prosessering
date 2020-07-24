@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import * as React from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { hentServices } from '../api/service';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { IService } from '../typer/service';
@@ -62,7 +62,9 @@ const ServiceReducer = (state: IState, action: IAction): IState => {
 };
 
 const ServiceProvider: React.StatelessComponent = ({ children }) => {
-    const history = useHistory();
+    const { service } = useParams();
+    const serviceId = service;
+
     const [state, dispatch] = React.useReducer(ServiceReducer, {
         services: byggTomRessurs<IService[]>(),
         valgtService: undefined,
@@ -71,11 +73,20 @@ const ServiceProvider: React.StatelessComponent = ({ children }) => {
     React.useEffect(() => {
         dispatch({ type: actions.HENT_SERVICES });
         hentServices()
-            .then((tasks: Ressurs<IService[]>) => {
+            .then((services: Ressurs<IService[]>) => {
                 dispatch({
-                    payload: tasks,
+                    payload: services,
                     type: actions.HENT_SERVICES_SUKSESS,
                 });
+
+                if (services.status === RessursStatus.SUKSESS) {
+                    dispatch({
+                        payload: services.data.find(
+                            (apiService: IService) => apiService.id === serviceId
+                        ),
+                        type: actions.SETT_VALGT_SERVICE,
+                    });
+                }
             })
             .catch((error: AxiosError) => {
                 dispatch({

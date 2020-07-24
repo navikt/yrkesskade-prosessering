@@ -66,14 +66,15 @@
     "nav-frontend-typografi": "^2.0.20",
     "nav-frontend-typografi-style": "^1.0.22",
     "prop-types": "^15.7.2",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "request-promise": "^4.2.5",
-    "uuid": "^8.1.0",
-    "snyk": "^1.339.1"
+    "snyk": "^1.339.1",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.10.1",
