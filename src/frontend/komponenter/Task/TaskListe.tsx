@@ -19,7 +19,7 @@ const TaskListe: React.StatelessComponent<IProps> = ({ tasks }) => {
 
             {tasks
                 .sort((a, b) => moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt))
-                .map(task => {
+                .map((task) => {
                     return <TaskPanel key={task.id} task={task} />;
                 })}
         </React.Fragment>

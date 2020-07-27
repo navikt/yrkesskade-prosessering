@@ -6,6 +6,7 @@ import { RessursStatus } from '../../typer/ressurs';
 import { IService } from '../../typer/service';
 import { actions, Dispatch, useServiceContext, useServiceDispatch } from '../ServiceProvider';
 import ServiceIkon from './ServiceIkon';
+import { Knapp } from 'nav-frontend-knapper';
 
 const Services: React.FunctionComponent = () => {
     const services = useServiceContext().services;
@@ -35,20 +36,37 @@ const Services: React.FunctionComponent = () => {
 
 const Service = (service: IService, dispatch: Dispatch, history: any) => {
     return (
-        <button
-            key={service.id}
-            onClick={() => {
-                dispatch({
-                    payload: service,
-                    type: actions.SETT_VALGT_SERVICE,
-                });
-                history.push(`/service/${service.id}`);
-            }}
-            className={'services__service'}
-        >
+        <div key={service.id} className={'services__service'}>
             <ServiceIkon heigth={150} width={150} />
             <Systemtittel children={service.displayName} />
-        </button>
+
+            <div className={'services__service--actions'}>
+                <Knapp
+                    onClick={() => {
+                        dispatch({
+                            payload: service,
+                            type: actions.SETT_VALGT_SERVICE,
+                        });
+                        history.push(`/service/${service.id}`);
+                    }}
+                    mini={true}
+                >
+                    Alle tasker
+                </Knapp>
+                <Knapp
+                    onClick={() => {
+                        dispatch({
+                            payload: service,
+                            type: actions.SETT_VALGT_SERVICE,
+                        });
+                        history.push(`/service/${service.id}/gruppert`);
+                    }}
+                    mini={true}
+                >
+                    Gruppert
+                </Knapp>
+            </div>
+        </div>
     );
 };
 

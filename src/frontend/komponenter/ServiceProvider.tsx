@@ -62,7 +62,8 @@ const ServiceReducer = (state: IState, action: IAction): IState => {
 };
 
 const ServiceProvider: React.StatelessComponent = ({ children }) => {
-    const history = useHistory();
+    const serviceId = useHistory().location.pathname.split('/')[2];
+
     const [state, dispatch] = React.useReducer(ServiceReducer, {
         services: byggTomRessurs<IService[]>(),
         valgtService: undefined,
@@ -71,11 +72,20 @@ const ServiceProvider: React.StatelessComponent = ({ children }) => {
     React.useEffect(() => {
         dispatch({ type: actions.HENT_SERVICES });
         hentServices()
-            .then((tasks: Ressurs<IService[]>) => {
+            .then((services: Ressurs<IService[]>) => {
                 dispatch({
-                    payload: tasks,
+                    payload: services,
                     type: actions.HENT_SERVICES_SUKSESS,
                 });
+
+                if (services.status === RessursStatus.SUKSESS) {
+                    dispatch({
+                        payload: services.data.find(
+                            (apiService: IService) => apiService.id === serviceId
+                        ),
+                        type: actions.SETT_VALGT_SERVICE,
+                    });
+                }
             })
             .catch((error: AxiosError) => {
                 dispatch({
