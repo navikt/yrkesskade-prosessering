@@ -23,6 +23,7 @@ export enum actions {
     REKJØR_ALLE_TASKS = 'REKJØR_ALLE_TASKS',
     REKJØR_TASK = 'REKJØR_TASK',
     SETT_FILTER = 'SETT_FILTER',
+    SETT_SIDE = 'SETT_SIDE',
     HENT_TASK_LOGG = 'HENT_TASK_LOGG',
 }
 
@@ -37,6 +38,7 @@ interface IState {
     avvikshåndteringDTO: IAvvikshåndteringDTO | undefined;
     rekjørAlle: boolean;
     rekjørId: string;
+    side: number;
     statusFilter?: taskStatus;
     tasks: Ressurs<ITaskResponse>;
     logg: ITaskLogger;
@@ -92,6 +94,12 @@ const TaskReducer = (state: IState, action: IAction): IState => {
                 statusFilter: action.payload,
             };
         }
+        case actions.SETT_SIDE: {
+            return {
+                ...state,
+                side: action.payload,
+            };
+        }
         case actions.HENT_TASK_LOGG: {
             if (state.tasks.status === RessursStatus.SUKSESS) {
                 return {
@@ -119,33 +127,36 @@ const TaskProvider: React.FC = ({ children }) => {
         'statusFilter'
     ) as taskStatus;
 
+    const queryParamSideAsString = new URLSearchParams(location.search).get('side');
+    const queryParamSide = queryParamSideAsString ? parseInt(queryParamSideAsString, 10) : 0;
     const valgtService: IService | undefined = useServiceContext().valgtService;
     const [state, dispatch] = React.useReducer(TaskReducer, {
         avvikshåndteringDTO: undefined,
         rekjørAlle: false,
         statusFilter: queryParamStatusFilter ? queryParamStatusFilter : taskStatus.FEILET,
+        side: queryParamSide,
         rekjørId: '',
         tasks: byggTomRessurs<ITaskResponse>(),
         logg: {},
     });
 
     React.useEffect(() => {
-        if (queryParamStatusFilter !== state.statusFilter) {
+        if (queryParamStatusFilter !== state.statusFilter || queryParamSide !== state.side) {
             history.replace({
                 pathname: location.pathname,
-                search: '?statusFilter=' + state.statusFilter,
+                search: `?statusFilter=${state.statusFilter}&side=${state.side}`,
             });
         }
-    }, [state.statusFilter, history]);
+    }, [state.statusFilter, state.side, history]);
 
     React.useEffect(() => {
         internHentTasks();
-    }, [state.statusFilter, valgtService]);
+    }, [state.statusFilter, valgtService, state.side]);
 
     const internHentTasks = () => {
         if (valgtService && state.statusFilter) {
             dispatch({ type: actions.HENT_TASKS });
-            hentTasks2(valgtService, state.statusFilter).then(
+            hentTasks2(valgtService, state.statusFilter, state.side).then(
                 (response: Ressurs<ITaskResponse>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         dispatch({

@@ -4,6 +4,7 @@ import { parse } from 'query-string';
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { taskStatus, ITask } from '../../typer/task';
+import Paginering from '../Felleskomponenter/Paginering/Paginering';
 import { useTaskContext } from '../TaskProvider';
 import * as moment from 'moment';
 import * as classNames from 'classnames';
@@ -45,6 +46,7 @@ const GruppertTasks: React.FunctionComponent = () => {
                     <div className={'gruppert-tasks__container'}>
                         <div className={'gruppert-tasks__container--venstremeny'}>
                             <div className={'venstremeny'}>
+                                <Paginering />
                                 {Object.values(gruppertTasks).map((tasker: ITask[]) => {
                                     const sistKjørtTask = tasker[0];
                                     const displayCallId = sistKjørtTask.metadata.callId;

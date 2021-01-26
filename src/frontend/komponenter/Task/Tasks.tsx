@@ -1,6 +1,7 @@
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
 import { RessursStatus } from '@navikt/familie-typer';
+import Paginering from '../Felleskomponenter/Paginering/Paginering';
 import { useTaskContext } from '../TaskProvider';
 import TaskListe from './TaskListe';
 import TopBar from '../Felleskomponenter/TopBar/TopBar';
@@ -15,6 +16,7 @@ const Tasks: React.FunctionComponent = () => {
                     <TopBar />
 
                     <br />
+                    <Paginering />
                     <TaskListe tasks={tasks.data.tasks} />
                 </div>
             );
