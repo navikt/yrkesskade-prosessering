@@ -18,12 +18,18 @@ export const hentTasks = (
 
 export const hentTasks2 = (
     valgtService: IService,
-    statusFilter: taskStatus
+    statusFilter: taskStatus,
+    side: number
 ): Promise<Ressurs<ITaskResponse>> => {
+    const params =
+        statusFilter !== taskStatus.ALLE
+            ? {
+                  status: statusFilter,
+                  page: side,
+              }
+            : { page: side };
     return axiosRequest({
-        params: statusFilter !== taskStatus.ALLE && {
-            status: statusFilter,
-        },
+        params,
         method: 'GET',
         url: `${valgtService.proxyPath}/v2/task`,
     });
