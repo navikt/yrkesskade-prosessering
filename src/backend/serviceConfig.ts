@@ -21,6 +21,7 @@ if (process.env.ENV === 'local') {
         enslig_mottak: `https://familie-ef-mottak.${process.env.ENV}-fss-pub.nais.io`,
         enslig_sak: `https://familie-ef-sak.${process.env.ENV}-fss-pub.nais.io`,
         kontantstøtte_mottak: `https://familie-ks-mottak.${process.env.ENV}-fss-pub.nais.io`,
+        tilbake: `https://familie-tilbake.${process.env.ENV}-fss-pub.nais.io`,
     };
 }
 
@@ -52,6 +53,13 @@ export const serviceConfig: IService[] = [
         id: 'familie-ef-mottak',
         proxyPath: '/familie-ef-mottak/api',
         proxyUrl: proxyUrls.enslig_mottak,
+    },
+    {
+        clientId: process.env.FAMILIE_TILBAKE_CLIENT_ID,
+        displayName: 'Tilbakekreving',
+        id: 'familie-tilbake',
+        proxyPath: '/familie-tilbake/api',
+        proxyUrl: proxyUrls.tilbake,
     },
     {
         clientId: process.env.EF_SAK_CLIENT_ID,
