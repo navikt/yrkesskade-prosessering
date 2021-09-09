@@ -22,7 +22,7 @@ if (process.env.ENV === 'local') {
         enslig_sak: `http://familie-ef-sak`,
         enslig_iverksett: `http://familie-ef-iverksett`,
         kontantstøtte_mottak: `https://familie-ks-mottak.${process.env.ENV}-fss-pub.nais.io`,
-        tilbake: `https://familie-tilbake.${process.env.ENV}-fss-pub.nais.io`,
+        tilbake: `http://familie-tilbake`,
     };
 }
 

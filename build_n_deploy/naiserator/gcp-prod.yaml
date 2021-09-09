@@ -31,12 +31,12 @@ spec:
       rules:
         - application: familie-ef-sak
         - application: familie-ef-iverksett
+        - application: familie-tilbake
       external:
         - host: familie-ba-mottak.prod-fss-pub.nais.io
         - host: familie-ba-sak.prod-fss-pub.nais.io
         - host: familie-ks-mottak.prod-fss-pub.nais.io
         - host: familie-ef-mottak.prod-fss-pub.nais.io
-        - host: familie-tilbake.prod-fss-pub.nais.io
   resources:
     limits:
       cpu: 2000m
