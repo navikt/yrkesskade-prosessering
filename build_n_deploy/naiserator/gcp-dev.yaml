@@ -33,11 +33,11 @@ spec:
         - application: familie-ef-sak
         - application: familie-ef-iverksett
         - application: familie-tilbake
+        - application: familie-ef-mottak
       external:
         - host: familie-ba-mottak.dev-fss-pub.nais.io
         - host: familie-ba-sak.dev-fss-pub.nais.io
         - host: familie-ks-mottak.dev-fss-pub.nais.io
-        - host: familie-ef-mottak.dev-fss-pub.nais.io
   resources:
     limits:
       cpu: 2000m
