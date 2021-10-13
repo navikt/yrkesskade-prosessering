@@ -6,7 +6,7 @@ on:
       - 'master'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-prosessering:${{ github.sha }}
+  IMAGE: ghcr.io/navikt/familie-prosessering:${{ github.sha }}
 
 jobs:
   build:
@@ -18,8 +18,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          docker build . -t ${IMAGE}
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
+          docker build --tag ${IMAGE} .
           docker push ${IMAGE}
   deploy:
     name: Deploy to NAIS
