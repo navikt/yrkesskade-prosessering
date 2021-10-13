@@ -1,10 +1,5 @@
-name: Build, push, and deploy app to dev
-
-on:
-  workflow_dispatch:
-  push:
-    branches-ignore:
-      - 'master'
+name: Build and deploy app to dev
+on: [pull_request, workflow_dispatch]
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-prosessering:${{ github.sha }}
