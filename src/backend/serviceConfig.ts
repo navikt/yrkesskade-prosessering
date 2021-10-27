@@ -49,7 +49,7 @@ export const serviceConfig: IService[] = [
         proxyUrl: proxyUrls.barnetrygd_sak,
     },
     {
-        clientId: process.env.EF_MOTTAK_GCP_CLIENT_ID,
+        clientId: process.env.EF_MOTTAK_CLIENT_ID,
         displayName: 'Alene med barn - mottak',
         id: 'familie-ef-mottak',
         proxyPath: '/familie-ef-mottak/api',
