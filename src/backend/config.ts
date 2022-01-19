@@ -1,4 +1,5 @@
-import { ISessionKonfigurasjon } from '@navikt/familie-backend';
+import { IApi, ISessionKonfigurasjon } from '@navikt/familie-backend';
+import { IService, utledScope } from './serviceConfig';
 
 // Miljøvariabler
 const Environment = () => {
@@ -21,6 +22,13 @@ const Environment = () => {
 };
 
 const env = Environment();
+
+export const oboConfig = (service: IService): IApi => {
+    return {
+        clientId: service.id,
+        scopes: service.scope ? [service.scope] : [utledScope(service.id, service.cluster)],
+    };
+};
 
 export const sessionConfig: ISessionKonfigurasjon = {
     cookieSecret: process.env.SESSION_SECRET,

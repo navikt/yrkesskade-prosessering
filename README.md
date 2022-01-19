@@ -16,14 +16,25 @@ Ting du må gjøre for å få frontend til å snakke med din backend:
 * Starte dev-server `yarn start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
 
-Appen krever en del environment variabler og legges til i .env fila i root på prosjektet. Disse hentes i vault.
+For at lokal-secret skal fungere må applikasjonen du skal nå (mottak, sak, iverksett..?) ha følgende i sin `azure-ad-app-lokal.yaml`:
+```
+spec:
+  preAuthorizedApplications:
+    ...
+    - application: familie-prosessering-lokal
+      cluster: dev-gcp
+      namespace: teamfamilie
+```
+
+Appen krever en del environment variabler og legges til i .env fila i root på prosjektet.
+secret kan hentes fra cluster med `kubectl -n teamfamilie get secret azuread-familie-prosessering-lokal -o json | jq '.data | map_values(@base64d)'`
+
+Bruk override_scope for å sette scope manuelt for den applikasjonen du vil kjøre mot lokalt
 ```
     CLIENT_ID='<application_id from aad app>'
     CLIENT_SECRET='<KEY from aad app>'
     SESSION_SECRET='<any string of length 32>'
-
-    APP_SCOPE: api://APP_CLIENT_ID/.default // Hver tjeneste appen kaller må legges til på denne måten
-    
+    OVERRIDE_SCOPE=api://.../.default
     ENV=local
 ```
 
