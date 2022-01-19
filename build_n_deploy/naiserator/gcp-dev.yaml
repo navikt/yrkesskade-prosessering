@@ -35,9 +35,9 @@ spec:
         - application: familie-tilbake
         - application: familie-ef-mottak
         - application: familie-ba-migrering
+        - application: familie-ba-sak
       external:
         - host: familie-ba-mottak.dev-fss-pub.nais.io
-        - host: familie-ba-sak.dev-fss-pub.nais.io
         - host: familie-ks-mottak.dev-fss-pub.nais.io
   resources:
     limits:
