@@ -1,8 +1,9 @@
 import './azureConfig';
-import backend, { IApp, ensureAuthenticated, getLogTimestamp } from '@navikt/familie-backend';
+import backend, { IApp, ensureAuthenticated } from '@navikt/familie-backend';
 import bodyParser from 'body-parser';
 import express from 'express';
 import loglevel from 'loglevel';
+import moment from 'moment';
 import path from 'path';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
@@ -51,11 +52,11 @@ backend(sessionConfig).then(({ app, azureAuthClient, router }: IApp) => {
 
     app.listen(port, '0.0.0.0', () => {
         loglevel.info(
-            `${getLogTimestamp()}: server startet på port ${port}. Build version: ${
+            `${moment().toISOString(true)}: server startet på port ${port}. Build version: ${
                 process.env.APP_VERSION
             }.`
         );
     }).on('error', (err) => {
-        loglevel.error(`${getLogTimestamp()}: server startup failed - ${err}`);
+        loglevel.error(`${moment().toISOString(true)}: server startup failed - ${err}`);
     });
 });

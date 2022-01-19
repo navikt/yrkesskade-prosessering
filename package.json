@@ -20,12 +20,12 @@
     }
   },
   "dependencies": {
-    "@navikt/familie-backend": "^5.0.17",
-    "@navikt/familie-typer": "^3.0.6",
-    "@navikt/fnrvalidator": "^1.1.2",
+    "@navikt/familie-backend": "^5.0.30",
+    "@navikt/familie-typer": "^3.0.14",
+    "@navikt/fnrvalidator": "^1.1.4",
     "@types/body-parser": "^1.19.0",
     "@types/classnames": "^2.2.10",
-    "@types/express": "^4.17.9",
+    "@types/express": "^4.17.11",
     "@types/helmet": "^0.0.48",
     "@types/http-proxy-middleware": "^0.19.3",
     "@types/react": "^16.9.52",
