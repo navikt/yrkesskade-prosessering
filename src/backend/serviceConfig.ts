@@ -17,7 +17,7 @@ if (process.env.ENV === 'local') {
 } else {
     proxyUrls = {
         barnetrygd_mottak: `https://familie-ba-mottak.${process.env.ENV}-fss-pub.nais.io`,
-        barnetrygd_sak: `https://familie-ba-sak.${process.env.ENV}-fss-pub.nais.io`,
+        barnetrygd_sak: `https://familie-ba-sak`,
         enslig_mottak: `http://familie-ef-mottak`,
         enslig_sak: `http://familie-ef-sak`,
         enslig_iverksett: `http://familie-ef-iverksett`,
