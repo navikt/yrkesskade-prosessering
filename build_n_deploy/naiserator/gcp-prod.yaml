@@ -20,12 +20,12 @@ spec:
     max: 1
     cpuThresholdPercentage: 50
   ingresses: 
-    - "https://familie-prosessering.adeo.no"
+    - "https://familie-prosessering.intern.nav.no"
   azure:
     application:
       enabled: true
       replyURLs:
-        - 'https://familie-prosessering.adeo.no/auth/openid/callback'
+        - 'https://familie-prosessering.intern.nav.no/auth/openid/callback'
   accessPolicy:
     outbound:
       rules:
