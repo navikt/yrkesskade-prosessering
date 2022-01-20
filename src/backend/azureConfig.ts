@@ -17,14 +17,14 @@ const konfigurerAzure = () => {
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             break;
         case 'dev':
-            process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.dev.nav.no`;
-            process.env.AAD_REDIRECT_URL = `https://${host}.dev.nav.no/auth/openid/callback`;
+            process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.dev.intern.nav.no`;
+            process.env.AAD_REDIRECT_URL = `https://${host}.dev.intern.nav.no/auth/openid/callback`;
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             settAzureAdPropsFraEnv();
             break;
         case 'prod':
-            process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.adeo.no`;
-            process.env.AAD_REDIRECT_URL = `https://${host}.adeo.no/auth/openid/callback`;
+            process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.intern.nav.no`;
+            process.env.AAD_REDIRECT_URL = `https://${host}.intern.nav.no/auth/openid/callback`;
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             settAzureAdPropsFraEnv();
             break;

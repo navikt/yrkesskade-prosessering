@@ -1,5 +1,6 @@
 export interface IService {
-    clientId: string;
+    scope?: string;
+    cluster: 'gcp' | 'fss';
     displayName: string;
     proxyPath: string;
     id: string;
@@ -12,6 +13,7 @@ if (process.env.ENV === 'local') {
         barnetrygd_mottak: 'http://localhost:8090',
         barnetrygd_sak: 'http://localhost:8089',
         enslig_mottak: 'http://localhost:8092',
+        enslig_sak: 'http://localhost:8093',
         kontantstøtte_mottak: 'http://localhost:8084',
     };
 } else {
@@ -27,58 +29,67 @@ if (process.env.ENV === 'local') {
     };
 }
 
+export const utledScope = (appId: string, cluster: 'gcp' | 'fss') => {
+    if (process.env.ENV === 'local' && process.env.OVERRIDE_SCOPE) {
+        return process.env.OVERRIDE_SCOPE;
+    }
+    const env = process.env.ENV === 'local' ? 'dev' : process.env.ENV;
+    return `api://${env}-${cluster}.teamfamilie.${appId}/.default`;
+};
+
 export const serviceConfig: IService[] = [
     {
-        clientId: process.env.KS_MOTTAK_CLIENT_ID,
+        scope: process.env.KS_MOTTAK_SCOPE,
+        cluster: 'fss',
         displayName: 'Kontantstøtte mottak',
         id: 'familie-ks-mottak',
         proxyPath: '/familie-ks-mottak/api',
         proxyUrl: proxyUrls.kontantstøtte_mottak,
     },
     {
-        clientId: process.env.BA_MOTTAK_CLIENT_ID,
+        cluster: 'fss',
         displayName: 'Barnetrygd mottak',
         id: 'familie-ba-mottak',
         proxyPath: '/familie-ba-mottak/api',
         proxyUrl: proxyUrls.barnetrygd_mottak,
     },
     {
-        clientId: process.env.BA_SAK_CLIENT_ID,
+        cluster: 'gcp',
         displayName: 'Barnetrygd sak',
         id: 'familie-ba-sak',
         proxyPath: '/familie-ba-sak/api',
         proxyUrl: proxyUrls.barnetrygd_sak,
     },
     {
-        clientId: process.env.BA_MIGRERING_CLIENT_ID,
+        cluster: 'gcp',
         displayName: 'Barnetrygd migrering',
         id: 'familie-ba-migrering',
         proxyPath: '/familie-ba-migrering/api',
         proxyUrl: proxyUrls.barnetrygd_migrering,
     },
     {
-        clientId: process.env.EF_MOTTAK_CLIENT_ID,
+        cluster: 'gcp',
         displayName: 'Alene med barn - mottak',
         id: 'familie-ef-mottak',
         proxyPath: '/familie-ef-mottak/api',
         proxyUrl: proxyUrls.enslig_mottak,
     },
     {
-        clientId: process.env.FAMILIE_TILBAKE_CLIENT_ID,
+        cluster: 'gcp',
         displayName: 'Tilbakekreving',
         id: 'familie-tilbake',
         proxyPath: '/familie-tilbake/api',
         proxyUrl: proxyUrls.tilbake,
     },
     {
-        clientId: process.env.EF_SAK_CLIENT_ID,
+        cluster: 'gcp',
         displayName: 'Alene med barn - sak',
         id: 'familie-ef-sak',
         proxyPath: '/familie-ef-sak/api',
         proxyUrl: proxyUrls.enslig_sak,
     },
     {
-        clientId: process.env.EF_IVERKSETT_CLIENT_ID,
+        cluster: 'gcp',
         displayName: 'Alene med barn - iverksett',
         id: 'familie-ef-iverksett',
         proxyPath: '/familie-ef-iverksett/api',
