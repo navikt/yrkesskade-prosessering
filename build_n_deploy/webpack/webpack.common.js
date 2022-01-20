@@ -30,10 +30,10 @@ module.exports = {
                 use: [
                     { loader: require.resolve('style-loader') },
                     {
-                        loader: require.resolve('css-loader'),
+                        loader: 'css-loader',
                         options: {
                             modules: {
-                                compileType: 'icss',
+                                mode: 'icss',
                             },
                         },
                     },
