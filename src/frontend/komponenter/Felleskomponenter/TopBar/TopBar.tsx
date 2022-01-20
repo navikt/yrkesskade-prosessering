@@ -22,7 +22,7 @@ const TopBar: FC = () => {
             )}
 
             <Select
-                onChange={(event) => settStatusFilter(event.target.value)}
+                onChange={(event) => settStatusFilter(event.target.value as taskStatus)}
                 value={statusFilter}
                 label={'Vis saker med status'}
             >

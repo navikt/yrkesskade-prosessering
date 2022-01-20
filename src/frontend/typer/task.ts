@@ -103,7 +103,7 @@ export interface ITaskLogg {
 }
 
 export interface IAvvikshåndteringDTO {
-    taskId: string;
+    taskId: number;
     årsak: string;
     avvikstype: avvikstyper;
 }

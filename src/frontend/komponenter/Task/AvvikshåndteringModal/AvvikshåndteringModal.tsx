@@ -37,7 +37,7 @@ const AvvikshåndteringModal: FC<IProps> = ({ settÅpen, task, åpen }) => {
             <form
                 onSubmit={(event) => {
                     avvikshåndter({
-                        avvikstype: valgtAvvikType,
+                        avvikstype: valgtAvvikType as avvikstyper,
                         taskId: task.id,
                         årsak,
                     });

@@ -1,5 +1,5 @@
 import { Location, useLocation } from 'react-router';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { avvikshåndterTask, hentTasks, rekjørTask } from '../api/task';
 import { IAvvikshåndteringDTO, ITaskResponse, taskStatus } from '../typer/task';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -19,7 +19,7 @@ const getQueryParamSide = (location: Location): number => {
 
 const [TaskProvider, useTaskContext] = constate(() => {
     const { valgtService } = useServiceContext();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const location = useLocation();
 
     const [tasks, settTasks] = useState<Ressurs<ITaskResponse>>(byggTomRessurs());
@@ -47,7 +47,7 @@ const [TaskProvider, useTaskContext] = constate(() => {
         }
     }, [statusFilter, side, history]);
 
-    const rekjørTasks = (id?: string | number) => {
+    const rekjørTasks = (id?: number) => {
         if (valgtService && statusFilter) {
             rekjørTask(valgtService, statusFilter, id).then((response) => {
                 if (response.status === RessursStatus.SUKSESS) {
