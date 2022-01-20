@@ -28,6 +28,17 @@ const config = mergeWithCustomize({
         }),
         new webpack.HotModuleReplacementPlugin(),
     ],
+    module: {
+        rules: [
+            // would only land a "hot-patch" to react-dom
+            {
+                test: /\.(js|ts)$/,
+                include: /node_modules\/react-dom/,
+                use: ['react-hot-loader/webpack'],
+            },
+        ],
+    }
+
 });
 
 module.exports = config;

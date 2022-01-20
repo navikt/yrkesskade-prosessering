@@ -1,15 +1,14 @@
+import { ISaksbehandler } from '@navikt/familie-typer';
 import Modal from 'nav-frontend-modal';
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import Dekoratør from './Felleskomponenter/Dekoratør/Dekoratør';
+import GruppertTasks from './GruppertTasks/GruppertTasks';
 import { ServiceProvider } from './ServiceContext';
 import Services from './Services/Services';
 import Tasks from './Task/Tasks';
 import { TaskProvider } from './TaskProvider';
-import GruppertTasks from './GruppertTasks/GruppertTasks';
-import { taskStatus } from '../typer/task';
-import { ISaksbehandler } from '@navikt/familie-typer';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 
@@ -23,44 +22,30 @@ const App: React.FunctionComponent = () => {
     }, []);
 
     return (
-        <Router>
+        <BrowserRouter>
             <Dekoratør
                 innloggetSaksbehandler={innloggetSaksbehandler}
                 tittel={'Oppgavebehandling'}
                 onClick={() => {
                     window.location.href = `${window.origin}/auth/logout`;
-                }}
-            />
+                }}/>
             <div className={'container'}>
                 <ServiceProvider>
-                    <Switch>
-                        <Route exact={true} path={'/'} component={Services} />
+                    <Routes>
+
+                        <Route path={'/'} element={<Services/>}/>
                         <Route
-                            exact={true}
-                            path="/service/:service"
-                            render={({ match }) => {
-                                return (
-                                    <TaskProvider>
-                                        <Tasks />
-                                    </TaskProvider>
-                                );
-                            }}
+                            path="service/:service"
+                            element={<TaskProvider><Tasks/></TaskProvider>}
                         />
                         <Route
-                            exact={true}
-                            path="/service/:service/gruppert"
-                            render={({ match }) => {
-                                return (
-                                    <TaskProvider>
-                                        <GruppertTasks />
-                                    </TaskProvider>
-                                );
-                            }}
+                            path="service/:service/gruppert"
+                            element={<TaskProvider><GruppertTasks/></TaskProvider>}
                         />
-                    </Switch>
+                    </Routes>
                 </ServiceProvider>
             </div>
-        </Router>
+        </BrowserRouter>
     );
 };
 

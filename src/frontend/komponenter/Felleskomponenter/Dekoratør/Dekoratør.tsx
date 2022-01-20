@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { ISaksbehandler } from '@navikt/familie-typer';
 
 interface IProps {
@@ -15,11 +15,11 @@ const Dekoratør: React.StatelessComponent<IProps> = ({
     onClick,
     tittel,
 }) => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return (
         <div className={'dekoratør'}>
-            <button onClick={() => history.push('/')} className={'dekoratør__tittel'}>
+            <button onClick={() => navigate('/')} className={'dekoratør__tittel'}>
                 <Innholdstittel className={'dekoratør__tittel--tekst'} children={tittel} />
                 <div className={'dekoratør__skille'} />
             </button>

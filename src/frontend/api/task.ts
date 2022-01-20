@@ -32,7 +32,7 @@ export const hentTaskLogg = (valgtService: IService, id: number): Promise<Ressur
 export const rekjørTask = (
     valgtService: IService,
     statusFilter: taskStatus,
-    taskId?: string
+    taskId?: string | number
 ): Promise<Ressurs<ITask[]>> => {
     if (taskId) {
         return axiosRequest({

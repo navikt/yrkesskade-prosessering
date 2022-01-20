@@ -1,25 +1,25 @@
-import { useHistory, useLocation } from 'react-router';
+import { Location, useLocation } from 'react-router';
+import { useNavigate } from "react-router-dom";
 import { avvikshåndterTask, hentTasks, rekjørTask } from '../api/task';
 import { IAvvikshåndteringDTO, ITaskResponse, taskStatus } from '../typer/task';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import constate from 'constate';
 import { useEffect, useState } from 'react';
 import { useServiceContext } from './ServiceContext';
-import * as H from 'history';
 
-const getQueryParamStatusFilter = (location: H.Location<unknown>): taskStatus => {
+const getQueryParamStatusFilter = (location: Location): taskStatus => {
     const status = new URLSearchParams(location.search).get('statusFilter') as taskStatus;
     return status || taskStatus.FEILET;
 };
 
-const getQueryParamSide = (location: H.Location<unknown>): number => {
+const getQueryParamSide = (location: Location): number => {
     const queryParamSideAsString = new URLSearchParams(location.search).get('side');
     return queryParamSideAsString ? parseInt(queryParamSideAsString, 10) : 0;
 };
 
 const [TaskProvider, useTaskContext] = constate(() => {
     const { valgtService } = useServiceContext();
-    const history = useHistory();
+    const navigate = useNavigate()
     const location = useLocation();
 
     const [tasks, settTasks] = useState<Ressurs<ITaskResponse>>(byggTomRessurs());
@@ -43,14 +43,11 @@ const [TaskProvider, useTaskContext] = constate(() => {
             getQueryParamStatusFilter(location) !== statusFilter ||
             getQueryParamSide(location) !== side
         ) {
-            history.replace({
-                pathname: location.pathname,
-                search: `?statusFilter=${statusFilter}&side=${side}`,
-            });
+            navigate(`${location.pathname}?statusFilter=${statusFilter}&side=${side}`);
         }
     }, [statusFilter, side, history]);
 
-    const rekjørTasks = (id?: string) => {
+    const rekjørTasks = (id?: string | number) => {
         if (valgtService && statusFilter) {
             rekjørTask(valgtService, statusFilter, id).then((response) => {
                 if (response.status === RessursStatus.SUKSESS) {
