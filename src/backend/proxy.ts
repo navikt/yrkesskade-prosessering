@@ -1,4 +1,5 @@
 import { Client, appConfig, getOnBehalfOfAccessToken, IApi } from '@navikt/familie-backend';
+import { logError, logWarn } from '@navikt/familie-logging';
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -40,14 +41,14 @@ export const attachToken = (authClient: Client, service: IService) => {
             })
             .catch((e) => {
                 if (e.error === 'invalid_grant') {
-                    console.log(`invalid_grant`);
+                    logWarn(`invalid_grant`);
                     _res.status(500).json({
                         status: 'IKKE_TILGANG',
                         frontendFeilmelding:
                             'Uventet feil. Det er mulig at du ikke har tilgang til applikasjonen.',
                     });
                 } else {
-                    console.error(`Uventet feil - getOnBehalfOfAccessToken  ${e}`);
+                    logError(`Uventet feil - getOnBehalfOfAccessToken`, e);
                     _res.status(500).json({
                         status: 'FEILET',
                         frontendFeilmelding: 'Uventet feil. Vennligst prøv på nytt.',
