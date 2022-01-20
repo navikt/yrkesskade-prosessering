@@ -1,4 +1,4 @@
-import { Client, appConfig, getOnBehalfOfAccessToken, IApi } from '@navikt/familie-backend';
+import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { logError, logWarn } from '@navikt/familie-logging';
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest, IncomingMessage, ServerResponse } from 'http';

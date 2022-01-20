@@ -31,9 +31,11 @@ const TaskLogg: React.FC<{ taskId: number; visLogg: boolean }> = ({ taskId, visL
     const [taskLogg, settTaskLogg] = useState<Ressurs<ITaskLogg[]>>(byggTomRessurs());
 
     const hentLogg = () => {
-        hentTaskLogg(valgtService, taskId).then((response: Ressurs<ITaskLogg[]>) => {
-            settTaskLogg(response);
-        });
+        if (valgtService) {
+            hentTaskLogg(valgtService, taskId).then((response: Ressurs<ITaskLogg[]>) => {
+                settTaskLogg(response);
+            });
+        }
     };
 
     useEffect(() => {
@@ -43,7 +45,7 @@ const TaskLogg: React.FC<{ taskId: number; visLogg: boolean }> = ({ taskId, visL
     }, [taskId, visLogg]);
 
     if (taskLogg.status === RessursStatus.SUKSESS) {
-        let elements = (taskLogg.data || []).map((logg: ITaskLogg, index: number) => {
+        const elements = (taskLogg.data || []).map((logg: ITaskLogg, index: number) => {
             const stackTrace = hentStackTrace(logg.melding);
 
             return (

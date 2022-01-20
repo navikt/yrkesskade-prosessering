@@ -6,9 +6,9 @@ import constate from 'constate';
 import { useHistory } from 'react-router';
 import * as H from 'history';
 
-function getServiceId(location: H.Location<unknown>) {
+const getServiceId = (location: H.Location<unknown>) => {
     return location.pathname.split('/')[2];
-}
+};
 
 const [ServiceProvider, useServiceContext] = constate(() => {
     const history = useHistory();
