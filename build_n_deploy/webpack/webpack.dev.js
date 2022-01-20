@@ -17,7 +17,7 @@ const config = mergeWithCustomize({
     },
     output: {
         path: path.join(__dirname, '../../frontend_development'),
-        filename: '[name].[hash].js',
+        filename: '[name].[contenthash].js',
         publicPath: '/assets/',
         globalObject: 'this',
     },
@@ -37,8 +37,7 @@ const config = mergeWithCustomize({
                 use: ['react-hot-loader/webpack'],
             },
         ],
-    }
-
+    },
 });
 
 module.exports = config;

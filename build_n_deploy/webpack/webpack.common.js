@@ -1,8 +1,6 @@
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TypeScriptTypeChecker = require('fork-ts-checker-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -68,6 +66,5 @@ module.exports = {
             alwaysWriteToDisk: true,
         }),
         new TypeScriptTypeChecker(),
-        new OptimizeCssAssetsPlugin(),
     ],
 };

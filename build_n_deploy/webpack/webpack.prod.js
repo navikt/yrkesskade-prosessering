@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const { mergeWithCustomize } = require('webpack-merge');
 
 const config = mergeWithCustomize({
@@ -28,7 +29,7 @@ const config = mergeWithCustomize({
         }),
     ],
     optimization: {
-        minimizer: [new TerserPlugin()],
+        minimizer: [new TerserPlugin(), new CssMinimizerWebpackPlugin()],
         emitOnErrors: false,
     },
 });
