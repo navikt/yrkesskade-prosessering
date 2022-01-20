@@ -1,14 +1,15 @@
 import { Client, appConfig, getOnBehalfOfAccessToken, IApi } from '@navikt/familie-backend';
 import { NextFunction, Request, Response } from 'express';
-import { ClientRequest } from 'http';
+import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { v4 as uuidv4 } from 'uuid';
 import { oboConfig } from './config';
 import { IService } from './serviceConfig';
 
-const restream = (proxyReq: ClientRequest, req: Request, res: Response) => {
-    if (req.body) {
-        const bodyData = JSON.stringify(req.body);
+const restream = (proxyReq: ClientRequest, req: IncomingMessage, _res: ServerResponse) => {
+    const requestBody = (req as Request).body;
+    if (requestBody) {
+        const bodyData = JSON.stringify(requestBody);
         proxyReq.setHeader('Content-Type', 'application/json');
         proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
         proxyReq.write(bodyData);
