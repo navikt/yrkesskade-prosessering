@@ -22,6 +22,7 @@
   "dependencies": {
     "@navikt/familie-backend": "^5.0.30",
     "@navikt/familie-typer": "^3.0.14",
+    "@navikt/fnrvalidator": "^1.1.4",
     "@types/body-parser": "^1.19.0",
     "@types/classnames": "^2.2.10",
     "@types/express": "^4.17.11",
@@ -31,7 +32,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
     "@types/request-promise": "^4.1.46",
-    "@types/uuid": "^8.0.0",
+    "@types/uuid": "^8.3.4",
     "autoprefixer": "^9.8.5",
     "axios": "^0.21.1",
     "babel-loader": "^8.2.1",
@@ -66,8 +67,8 @@
     "nav-frontend-tabell-style": "^0.2.22",
     "nav-frontend-typografi": "^2.0.25",
     "nav-frontend-typografi-style": "^1.0.22",
-    "prop-types": "^15.7.2",
-    "query-string": "^6.13.1",
+    "prop-types": "^15.8.1",
+    "query-string": "^7.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
@@ -76,7 +77,7 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "snyk": "^1.425.4",
-    "uuid": "^8.1.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.10.1",
