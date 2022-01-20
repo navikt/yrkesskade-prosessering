@@ -1,6 +1,10 @@
+.prettierignore
 *.json
 *.less
 *.yaml
 *.yml
 *.md
 *.html
+.husky/
+.env
+.gitignore
