@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const mergeWithCustomize = require('webpack-merge');
+const { mergeWithCustomize } = require('webpack-merge');
 
 const config = mergeWithCustomize({
     'entry.familie-ks-mottak': 'prepend',
@@ -23,14 +23,13 @@ const config = mergeWithCustomize({
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),
         }),
-        new webpack.optimize.OccurrenceOrderPlugin(false),
-        new webpack.NoEmitOnErrorsPlugin(),
         new MiniCssExtractPlugin({
             filename: 'familie-prosessering.css',
         }),
     ],
     optimization: {
         minimizer: [new TerserPlugin()],
+        emitOnErrors: false,
     },
 });
 

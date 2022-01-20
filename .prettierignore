@@ -5,6 +5,7 @@
 *.yml
 *.md
 *.html
+yarn.lock
 .husky/
 .env
 .gitignore

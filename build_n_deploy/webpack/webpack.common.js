@@ -51,7 +51,7 @@ module.exports = {
     optimization: {
         splitChunks: {
             cacheGroups: {
-                vendor: {
+                defaultVendors: {
                     test: /[\\/]node_modules[\\/]/,
                     name: 'vendors',
                     chunks: 'all',
@@ -59,6 +59,7 @@ module.exports = {
             },
         },
         runtimeChunk: true,
+        emitOnErrors: false,
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -67,7 +68,6 @@ module.exports = {
             alwaysWriteToDisk: true,
         }),
         new TypeScriptTypeChecker(),
-        new webpack.NoEmitOnErrorsPlugin(),
         new OptimizeCssAssetsPlugin(),
     ],
 };
