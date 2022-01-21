@@ -9,11 +9,11 @@ spec:
   image: {{image}}
   port: 8000
   liveness:
-    path: "/internal/isAlive"
+    path: "/isAlive"
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/internal/isReady"
+    path: "/isReady"
     initialDelay: 20
     timeout: 60
   replicas:
@@ -22,11 +22,10 @@ spec:
   azure:
     application:
       enabled: true
-      tentant: trygdeetaten.no
-      replyURLs:
-      {{#each ingresses as |url|}}
-        - {{url}}/auth/openid/callback
-      {{/each}}
+    sidecar:
+      enabled: true
+      autoLogin: false
+      errorPath: ""
   accessPolicy:
     outbound:
       rules:
@@ -41,4 +40,4 @@ spec:
       value: {{this.value}}
   {{/each}}
   envFrom:
-    - secret: prosessering
+    - secret: yrkesskade-prosessering
