@@ -1,0 +1,44 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: "yrkesskade-prosessering"
+  namespace: "yrkesskade"
+  labels:
+    "team": "yrkesskade"
+spec:
+  image: {{image}}
+  port: 8000
+  liveness:
+    path: "/internal/isAlive"
+    initialDelay: 20
+    timeout: 60
+  readiness:
+    path: "/internal/isReady"
+    initialDelay: 20
+    timeout: 60
+  replicas:
+    min: 2
+    max: 2  
+  azure:
+    application:
+      enabled: true
+      tentant: trygdeetaten.no
+      replyURLs:
+      {{#each ingresses as |url|}}
+        - {{url}}/auth/openid/callback
+      {{/each}}
+  accessPolicy:
+    outbound:
+      rules:
+        - application: yrkesskade-melding-mottak
+  ingresses:
+  {{#each ingresses as |url|}}
+    - {{url}}
+  {{/each}}
+  env:
+  {{#each env}}
+    - name: {{this.name }}
+      value: {{this.value}}
+  {{/each}}
+  envFrom:
+    - secret: prosessering

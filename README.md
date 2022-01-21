@@ -1,12 +1,12 @@
-# familie-prosessering
+# yrkesskade-prosessering
 
-Frontend applikasjon for monitorering og håndtering av prosesstasks for familieområdet
+Frontend applikasjon for monitorering og håndtering av prosesstasks for yrkesskade området
 
 Applikasjonen kan snakke med flere "backends" med konfigurasjon du finner i serviceConfig.ts.
 Ting du må gjøre for å få frontend til å snakke med din backend:
 1. Legg til config for din app i serviceConfig.ts
 2. Legg til appen som preauthorized i aad-iac repoet.
-3. Legg til scope for azure i familie secret for hvert cluster (dev og prod gcp)
+3. Legg til scope for azure i yrkesskade secret for hvert cluster (dev og prod gcp)
 4. Implementer interfacene som kreves i backenden. Se familie-ks-mottak for inspirasjon.
 5. Backend må ha en ingress slik at denne appen kan kalle backend fra gcp til fss.
 
@@ -16,18 +16,18 @@ Ting du må gjøre for å få frontend til å snakke med din backend:
 * Starte dev-server `yarn start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
 
-For at lokal-secret skal fungere må applikasjonen du skal nå (mottak, sak, iverksett..?) ha følgende i sin `azure-ad-app-lokal.yaml`:
+For at lokal-secret skal fungere må applikasjonen du skal nå (mottak..?) ha følgende i sin `azure-ad-app-lokal.yaml`:
 ```
 spec:
   preAuthorizedApplications:
     ...
-    - application: familie-prosessering-lokal
+    - application: yrkesskade-prosessering-lokal
       cluster: dev-gcp
-      namespace: teamfamilie
+      namespace: yrkesskade
 ```
 
 Appen krever en del environment variabler og legges til i .env fila i root på prosjektet.
-secret kan hentes fra cluster med `kubectl -n teamfamilie get secret azuread-familie-prosessering-lokal -o json | jq '.data | map_values(@base64d)'`
+secret kan hentes fra cluster med `kubectl -n yrkesskade get secret azuread-yrkesskade-prosessering-lokal -o json | jq '.data | map_values(@base64d)'`
 
 Bruk override_scope for å sette scope manuelt for den applikasjonen du vil kjøre mot lokalt
 ```
@@ -45,12 +45,6 @@ For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokal
 # Bygg og deploy
 Appen bygges på github actions. Alle commits til feature brancher går automatisk til gcp-dev og commits til master går direkte til gcp-prod.
 Hemmeligheter for appen ligger i etcd i kubernetes.
-
-# Henvendelser
-
-Spørsmål knyttet til koden eller prosjektet kan rettes til:
-
-* Henning Håkonsen, `henning.hakonsen@nav.no`
 
 ## For NAV-ansatte
 

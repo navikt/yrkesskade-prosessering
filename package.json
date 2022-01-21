@@ -1,16 +1,16 @@
 {
-  "name": "familie-prosessering",
+  "name": "yrkesskade-prosessering",
   "version": "0.0.1",
   "main": "node_dist/server.js",
-  "repository": "https://github.com/navikt/familie-prosessering.git",
-  "author": "Henning Håkonsen",
+  "repository": "https://github.com/navikt/yrkesskade-prosessering.git",
+  "author": "Team Yrkesskade",
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=production node node_dist/server.js",
     "start:mock": "NODE_ENV=development node dev-server/mock-server.js",
     "start:dev": "tsc && NODE_ENV=development node node_dist/server.js",
     "build": "yarn build:prod",
-    "build:prod": "tsc & webpack --config ./build_n_deploy/webpack/webpack.prod.js",
+    "build:prod": "tsc & webpack --config ./build_n_deploy/webpack.prod.js",
     "snyk-protect": "snyk protect",
     "prepare": "yarn run snyk-protect"
   },

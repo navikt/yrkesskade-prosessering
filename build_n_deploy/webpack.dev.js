@@ -4,12 +4,12 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common');
 
 const config = merge.strategy({
-    'entry.familie-ks-mottak': 'prepend',
+    'entry.yrkesskade-melding-mottak': 'prepend',
     'module.rules': 'append',
 })(common, {
     mode: 'development',
     entry: {
-        'familie-ks-mottak': [
+        'yrkesskade-melding-mottak': [
             'babel-polyfill',
             'react-hot-loader/patch',
             'webpack-hot-middleware/client?reload=true',

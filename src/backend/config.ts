@@ -32,7 +32,7 @@ export const oboConfig = (service: IService): IApi => {
 
 export const sessionConfig: ISessionKonfigurasjon = {
     cookieSecret: process.env.SESSION_SECRET,
-    navn: 'familie-prosessering',
+    navn: 'yrkesskade-prosessering',
     secureCookie: process.env.ENV === 'local' ? false : true,
 };
 

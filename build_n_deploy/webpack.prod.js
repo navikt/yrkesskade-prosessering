@@ -6,12 +6,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const config = merge.strategy({
-    'entry.familie-ks-mottak': 'prepend',
+    'entry.yrkesskade-melding-mottak': 'prepend',
     'module.rules': 'append',
 })(common, {
     mode: 'production',
     entry: {
-        'familie-ks-mottak': ['babel-polyfill'],
+        'yrkesskade-melding-mottak': ['babel-polyfill'],
     },
     output: {
         path: path.join(__dirname, '../../frontend_production'),

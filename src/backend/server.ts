@@ -13,7 +13,7 @@ import { IService, serviceConfig } from './serviceConfig';
 import { sessionConfig } from './config';
 
 /* tslint:disable */
-const config = require('../build_n_deploy/webpack/webpack.dev');
+const config = require('../build_n_deploy/webpack.dev');
 /* tslint:enable */
 
 loglevel.setDefaultLevel(loglevel.levels.INFO);
