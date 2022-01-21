@@ -39,5 +39,3 @@ spec:
     - name: {{this.name }}
       value: {{this.value}}
   {{/each}}
-  envFrom:
-    - secret: yrkesskade-prosessering
