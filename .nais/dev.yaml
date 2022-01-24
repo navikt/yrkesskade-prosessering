@@ -2,4 +2,4 @@ ingresses:
 - "https://yrkesskade-prosessering.dev.intern.nav.no"
 env:
 - name: ENV
-  value: "development"
+  value: "dev"
