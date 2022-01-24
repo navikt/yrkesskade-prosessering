@@ -10,7 +10,7 @@ export interface IService {
 let proxyUrls: { [key: string]: string } = {};
 if (process.env.ENV === 'local') {
     proxyUrls = {
-        yrkesskade_mottak: 'http://localhost:8090',
+        yrkesskade_mottak: 'http://localhost:9080',
     };
 } else {
     proxyUrls = {
@@ -32,6 +32,6 @@ export const serviceConfig: IService[] = [
         displayName: 'Yrkesskade mottak',
         id: 'yrkesskade-melding-mottak',
         proxyPath: '/yrkesskade-melding-mottak/api',
-        proxyUrl: proxyUrls.enslig_sak,
+        proxyUrl: proxyUrls.yrkesskade_mottak,
     },
 ];

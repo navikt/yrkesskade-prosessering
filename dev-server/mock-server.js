@@ -2,7 +2,7 @@ const app = require('./mock-routes');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('../build_n_deploy/webpack/webpack.dev');
+const config = require('../build_n_deploy/webpack.dev');
 const path = require('path');
 
 const port = 8000;
@@ -33,6 +33,6 @@ const server = app.listen(port, 'localhost', function onStart(err) {
     console.info('=== mock-server startet på http://localhost:%s/', port);
 });
 
-process.on('SIGTERM', function() {
+process.on('SIGTERM', function () {
     server.close();
 });

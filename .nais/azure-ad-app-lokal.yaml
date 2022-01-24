@@ -1,0 +1,21 @@
+#######
+# Denne er brukt til å gjøre det mulig å bruke tokens lokalt
+#
+# secret kan hentes fra cluster med "kubectl -n teamfamilie get secret azuread-familie-prosessering-lokal -o json | jq '.data | map_values(@base64d)'"
+#
+# Kjøres en gang eller ved endringer med
+# kubectl apply -f .nais/azure-ad-app-lokal.yaml
+###
+apiVersion: nais.io/v1
+kind: AzureAdApplication
+metadata:
+  name: yrkesskade-prosessering-lokal
+  namespace: yrkesskade
+  labels:
+    team: yrkesskade
+spec:
+  logoutUrl: "http://localhost:8000"
+  tenant: trygdeetaten.no
+  replyUrls:
+    - url: "http://localhost:8000/auth/openid/callback"
+  secretName: azuread-yrkesskade-prosessering-lokal
