@@ -1,3 +1,5 @@
+console.log(process.env);
+
 import './azureConfig';
 import backend, { IApp, ensureAuthenticated, getLogTimestamp } from '@navikt/familie-backend';
 import bodyParser from 'body-parser';
