@@ -16,18 +16,21 @@ const konfigurerAzure = () => {
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             break;
         case 'dev':
-            process.env.AAD_LOGOUT_REDIRECT_URL = `/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.dev.intern.nav.no`;
+            process.env.AAD_LOGOUT_REDIRECT_URL = `https://${host}.dev.intern.nav.no/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.dev.intern.nav.no`;
             process.env.AAD_REDIRECT_URL = `https://${host}.dev.intern.nav.no/auth/openid/callback`;
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             settAzureAdPropsFraEnv();
             break;
         case 'prod':
-            process.env.AAD_LOGOUT_REDIRECT_URL = `/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.intern.nav.no`;
-            process.env.AAD_REDIRECT_URL = `/auth/openid/callback`;
+            process.env.AAD_LOGOUT_REDIRECT_URL = `https://${host}..intern.nav.no/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.intern.nav.no`;
+            process.env.AAD_REDIRECT_URL = `https://${host}.intern.nav.no/auth/openid/callback`;
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             settAzureAdPropsFraEnv();
             break;
         default:
+            console.log(
+                'Environment variabler må være satt i secrets, .env eller env i docker/nais'
+            );
             break;
     }
 };
