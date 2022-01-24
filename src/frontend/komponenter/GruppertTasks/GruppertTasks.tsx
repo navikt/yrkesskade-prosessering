@@ -1,16 +1,16 @@
 import AlertStripe from 'nav-frontend-alertstriper';
-import { NavLink, useHistory, useParams } from 'react-router-dom';
-import { parse } from 'query-string';
+import { NavLink, useParams } from 'react-router-dom';
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { taskStatus, ITask } from '../../typer/task';
 import Paginering from '../Felleskomponenter/Paginering/Paginering';
 import { useTaskContext } from '../TaskProvider';
 import * as moment from 'moment';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import TaskListe from '../Task/TaskListe';
 import TopBar from '../Felleskomponenter/TopBar/TopBar';
 import { RessursStatus } from '@navikt/familie-typer';
+import { useSearchParams } from 'react-router-dom'
 import { FC } from 'react';
 
 interface GruppertTasker {
@@ -20,9 +20,9 @@ interface GruppertTasker {
 const GruppertTasks: FC = () => {
     const { service } = useParams();
     const { tasks, statusFilter } = useTaskContext();
-    const history = useHistory();
-    const search = parse(history.location.search);
-    const callId = search.callId ? search.callId.toString() : '';
+    const [searchParams] = useSearchParams();
+
+    const callId = searchParams.get('callId') ? searchParams.get('callId')?.toString() : '';
 
     const gruppertTasks: GruppertTasker =
         tasks.status === RessursStatus.SUKSESS
@@ -66,13 +66,13 @@ const GruppertTasks: FC = () => {
                                             id={displayCallId}
                                             to={to}
                                             tabIndex={0}
-                                            activeClassName={''}
                                             className={classNames(
                                                 'venstremeny__link',
-                                                history.location.search.includes(displayCallId)
-                                                    ? 'active'
+                                                finnesDetFeiledeTasker ? 'FEILET' : 'OK',
+                                                callId === displayCallId
+                                                    ? 'active-task'
                                                     : '',
-                                                finnesDetFeiledeTasker ? 'FEILET' : 'OK'
+
                                             )}
                                         >
                                             <Normaltekst>{`#${sistKjørtTask.id}, ${moment(

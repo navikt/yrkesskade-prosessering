@@ -8,7 +8,7 @@ import WebpackDevMiddleware from 'webpack-dev-middleware';
 export default (
     authClient: Client,
     router: Router,
-    middleware?: WebpackDevMiddleware.WebpackDevMiddleware
+    middleware?: WebpackDevMiddleware.API<Request, Response>
 ) => {
     router.get('/version', (req, res) => {
         res.status(200).send({ version: process.env.APP_VERSION }).end();
@@ -31,13 +31,17 @@ export default (
     });
 
     // APP
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' && middleware) {
         router.get('*', ensureAuthenticated(authClient, false), (req: Request, res: Response) => {
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.write(
-                middleware.fileSystem.readFileSync(path.join(__dirname, `${buildPath}/index.html`))
-            );
-            res.end();
+            if (middleware.context.outputFileSystem.readFileSync) {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.write(
+                    middleware.context.outputFileSystem.readFileSync(
+                        path.join(__dirname, `${buildPath}/index.html`)
+                    )
+                );
+                res.end();
+            }
         });
     } else {
         router.get('*', ensureAuthenticated(authClient, false), (req: Request, res: Response) => {

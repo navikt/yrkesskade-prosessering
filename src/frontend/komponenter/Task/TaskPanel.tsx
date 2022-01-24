@@ -1,4 +1,4 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';

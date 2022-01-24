@@ -7,8 +7,15 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+
+        "strictNullChecks": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
         "outDir": "node_dist",
         "baseUrl": "./src/backend",
+
     },
     "include": ["./src/backend"],
     "exclude": ["./src/frontend"],

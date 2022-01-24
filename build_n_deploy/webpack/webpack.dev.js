@@ -1,9 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { mergeWithCustomize } = require('webpack-merge');
 const common = require('./webpack.common');
 
-const config = merge.strategy({
+const config = mergeWithCustomize({
     'entry.familie-ks-mottak': 'prepend',
     'module.rules': 'append',
 })(common, {
@@ -17,7 +17,7 @@ const config = merge.strategy({
     },
     output: {
         path: path.join(__dirname, '../../frontend_development'),
-        filename: '[name].[hash].js',
+        filename: '[name].[contenthash].js',
         publicPath: '/assets/',
         globalObject: 'this',
     },
@@ -28,6 +28,16 @@ const config = merge.strategy({
         }),
         new webpack.HotModuleReplacementPlugin(),
     ],
+    module: {
+        rules: [
+            // would only land a "hot-patch" to react-dom
+            {
+                test: /\.(js|ts)$/,
+                include: /node_modules\/react-dom/,
+                use: ['react-hot-loader/webpack'],
+            },
+        ],
+    },
 });
 
 module.exports = config;

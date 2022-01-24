@@ -1,8 +1,6 @@
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TypeScriptTypeChecker = require('fork-ts-checker-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -28,19 +26,30 @@ module.exports = {
                 },
             },
             {
-                test: /\.(css|less)$/,
+                test: /\.(less)$/,
                 use: [
                     { loader: require.resolve('style-loader') },
-                    { loader: require.resolve('css-loader') },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                mode: 'icss',
+                            },
+                        },
+                    },
                     { loader: require.resolve('less-loader') },
                 ],
+            },
+            {
+                test: /\.svg$/,
+                loader: 'svg-inline-loader',
             },
         ],
     },
     optimization: {
         splitChunks: {
             cacheGroups: {
-                vendor: {
+                defaultVendors: {
                     test: /[\\/]node_modules[\\/]/,
                     name: 'vendors',
                     chunks: 'all',
@@ -48,6 +57,7 @@ module.exports = {
             },
         },
         runtimeChunk: true,
+        emitOnErrors: false,
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -56,7 +66,5 @@ module.exports = {
             alwaysWriteToDisk: true,
         }),
         new TypeScriptTypeChecker(),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new OptimizeCssAssetsPlugin(),
     ],
 };

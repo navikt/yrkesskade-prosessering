@@ -1,7 +1,8 @@
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { useHistory } from 'react-router';
+import { NavigateFunction } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { IService } from '../../typer/service';
 import ServiceIkon from './ServiceIkon';
 import { Knapp } from 'nav-frontend-knapper';
@@ -10,15 +11,14 @@ import { useServiceContext } from '../ServiceContext';
 
 const Services: React.FunctionComponent = () => {
     const { services } = useServiceContext();
-    const { settValgtService } = useServiceContext();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     switch (services.status) {
         case RessursStatus.SUKSESS:
             return (
                 <div className={'services'}>
                     {services.data.map((service: IService) =>
-                        Service(service, settValgtService, history)
+                        Service(service, navigate)
                     )}
                 </div>
             );
@@ -38,8 +38,7 @@ const Services: React.FunctionComponent = () => {
 
 const Service = (
     service: IService,
-    settValgtService: (service: IService) => void,
-    history: any
+    navigate: NavigateFunction
 ) => {
     return (
         <div key={service.id} className={'services__service'}>
@@ -49,7 +48,7 @@ const Service = (
             <div className={'services__service--actions'}>
                 <Knapp
                     onClick={() => {
-                        history.push(`/service/${service.id}`);
+                        navigate(`/service/${service.id}`);
                     }}
                     mini={true}
                 >
@@ -57,7 +56,7 @@ const Service = (
                 </Knapp>
                 <Knapp
                     onClick={() => {
-                        history.push(`/service/${service.id}/gruppert`);
+                        navigate(`/service/${service.id}/gruppert`);
                     }}
                     mini={true}
                 >

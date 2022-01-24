@@ -1,14 +1,16 @@
-import { Client, appConfig, getOnBehalfOfAccessToken, IApi } from '@navikt/familie-backend';
+import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
+import { logError, logWarn } from '@navikt/familie-logging';
 import { NextFunction, Request, Response } from 'express';
-import { ClientRequest } from 'http';
+import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { v4 as uuidv4 } from 'uuid';
 import { oboConfig } from './config';
 import { IService } from './serviceConfig';
 
-const restream = (proxyReq: ClientRequest, req: Request, res: Response) => {
-    if (req.body) {
-        const bodyData = JSON.stringify(req.body);
+const restream = (proxyReq: ClientRequest, req: IncomingMessage, _res: ServerResponse) => {
+    const requestBody = (req as Request).body;
+    if (requestBody) {
+        const bodyData = JSON.stringify(requestBody);
         proxyReq.setHeader('Content-Type', 'application/json');
         proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
         proxyReq.write(bodyData);
@@ -39,14 +41,14 @@ export const attachToken = (authClient: Client, service: IService) => {
             })
             .catch((e) => {
                 if (e.error === 'invalid_grant') {
-                    console.log(`invalid_grant`);
+                    logWarn(`invalid_grant`);
                     _res.status(500).json({
                         status: 'IKKE_TILGANG',
                         frontendFeilmelding:
                             'Uventet feil. Det er mulig at du ikke har tilgang til applikasjonen.',
                     });
                 } else {
-                    console.error(`Uventet feil - getOnBehalfOfAccessToken  ${e}`);
+                    logError(`Uventet feil - getOnBehalfOfAccessToken`, e);
                     _res.status(500).json({
                         status: 'FEILET',
                         frontendFeilmelding: 'Uventet feil. Vennligst prøv på nytt.',
