@@ -27,7 +27,7 @@ spec:
 ```
 
 Appen krever en del environment variabler og legges til i .env fila i root på prosjektet.
-secret kan hentes fra cluster med `kubectl -n yrkesskade get secret azuread-yrkesskade-prosessering-lokal -o json | jq '.data | map_values(@base64d)'`
+secret kan hentes fra cluster med `kubectl -n yrkesskade get secret yrkesskade-prosessering -o json | jq '.data | map_values(@base64d)'`
 
 Bruk override_scope for å sette scope manuelt for den applikasjonen du vil kjøre mot lokalt
 ```
