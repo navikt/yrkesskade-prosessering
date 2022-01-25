@@ -10,11 +10,7 @@ interface IProps {
     tittel: string;
 }
 
-const Dekoratør: React.StatelessComponent<IProps> = ({
-    innloggetSaksbehandler,
-    onClick,
-    tittel,
-}) => {
+const Dekoratør: React.FC<IProps> = ({ innloggetSaksbehandler, onClick, tittel }) => {
     const navigate = useNavigate();
 
     return (
