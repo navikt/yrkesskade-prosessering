@@ -23,6 +23,8 @@ spec:
     application:
       enabled: true
       tentant: trygdeetaten.no
+      replyURLs:
+        - 'https://yrkesskade-prosessering.dev.intern.nav.no/auth/openid/callback'
   accessPolicy:
     outbound:
       rules:
