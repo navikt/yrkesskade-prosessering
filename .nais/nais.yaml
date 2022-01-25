@@ -22,10 +22,7 @@ spec:
   azure:
     application:
       enabled: true
-    sidecar:
-      enabled: true
-      autoLogin: false
-      errorPath: ""
+      tentant: trygdeetaten.no
   accessPolicy:
     outbound:
       rules:
