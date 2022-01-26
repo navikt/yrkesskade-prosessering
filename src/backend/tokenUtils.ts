@@ -75,15 +75,21 @@ const loggOgReturnerOmTokenErGyldig = (req: Request, key: string, validAccessTok
 };
 
 export const hasValidAccessToken = (req: Request, key = tokenSetSelfId) => {
-    const tokenSets = getTokenSetsFromSession(req);
-    if (!tokenSets) {
-        return loggOgReturnerOmTokenErGyldig(req, key, false);
+
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return false
     }
-    const tokenSet = tokenSets[key];
-    if (!tokenSet) {
-        return loggOgReturnerOmTokenErGyldig(req, key, false);
+
+    const token = authHeader.split(' ')[1];
+    console.log('har token: ', token);
+    
+    if (!token) {
+        return false;
     }
-    return loggOgReturnerOmTokenErGyldig(req, key, erUtgått(new TokenSet(tokenSet)) === false);
+    
+    return true;
 };
 
 // kallkjedene kan ta litt tid, og tokenet kan i corner-case gå ut i løpet av kjeden. Så innfører et buffer
