@@ -28,7 +28,7 @@ const App: React.FunctionComponent = () => {
                 innloggetSaksbehandler={innloggetSaksbehandler}
                 tittel={'Oppgavebehandling'}
                 onClick={() => {
-                    window.location.href = `${window.origin}/auth/logout`;
+                    window.location.href = `${window.origin}/oauth2/logout`;
                 }}
             />
             <div className={'container'}>

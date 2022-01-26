@@ -22,9 +22,10 @@ spec:
   azure:
     application:
       enabled: true
-      tentant: trygdeetaten.no
-      replyURLs:
-        - 'https://yrkesskade-prosessering.dev.intern.nav.no/auth/openid/callback'
+    sidecar:
+      enabled: true
+      autoLogin: false
+      errorPath: ""
   accessPolicy:
     outbound:
       rules:
