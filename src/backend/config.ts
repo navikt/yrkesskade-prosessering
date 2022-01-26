@@ -1,4 +1,4 @@
-import { IApi, ISessionKonfigurasjon } from '@navikt/familie-backend';
+import { ISessionKonfigurasjon } from './typer';
 import { IService, utledScope } from './serviceConfig';
 
 // Miljøvariabler
@@ -23,7 +23,7 @@ const Environment = () => {
 
 const env = Environment();
 
-export const oboConfig = (service: IService): IApi => {
+export const oboConfig = (service: IService) => {
     return {
         clientId: service.id,
         scopes: service.scope ? [service.scope] : [utledScope(service.id, service.cluster)],

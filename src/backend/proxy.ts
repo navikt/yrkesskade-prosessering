@@ -1,4 +1,4 @@
-import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
+
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -29,7 +29,7 @@ export const doProxy = (service: IService) => {
     });
 };
 
-export const attachToken = (authClient: Client, service: IService) => {
+/*export const attachToken = (authClient: Client, service: IService) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
         getOnBehalfOfAccessToken(authClient, req, oboConfig(service))
             .then((accessToken: string) => {
@@ -55,3 +55,4 @@ export const attachToken = (authClient: Client, service: IService) => {
             });
     };
 };
+*/
