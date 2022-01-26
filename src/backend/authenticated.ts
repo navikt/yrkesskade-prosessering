@@ -6,7 +6,7 @@ import { hasValidAccessToken } from './tokenUtils';
 export const ensureAuthenticated = (sendUnauthorized: boolean) => {
     return async (req: Request, res: Response, next: NextFunction) => {
 
-        if (req.originalUrl.includes('login')) {
+        if (req.originalUrl.includes('oauth2/login')) {
             return next();
         }
 
@@ -21,7 +21,7 @@ export const ensureAuthenticated = (sendUnauthorized: boolean) => {
         if (sendUnauthorized) {
             res.status(401).send('Unauthorized');
         } else {
-            res.redirect(`/login?redirectUrl=${pathname}`);
+            res.redirect(`/oauth2/login?redirectUrl=${pathname}`);
         }
     };
 }
