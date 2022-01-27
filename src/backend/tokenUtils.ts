@@ -27,7 +27,7 @@ export const hasValidAccessToken = (req: Request) => {
 
     console.log('JWK: ', jwk);
 
-    const pem = jwkToPem(JSON.parse(jwk), { private: true });
+    const pem = jwkToPem(JSON.parse(jwk));
 
     console.log('PEM', pem);
 
