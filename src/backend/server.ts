@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'development') {
     app.use('/assets', express.static(path.join(__dirname, '..', 'frontend_production')));
 }
 
-konfigurerSesjon(app, null, sessionConfig);
+konfigurerSesjon(app, sessionConfig);
 
 serviceConfig.map((service: IService) => {
     app.use(

@@ -12,7 +12,6 @@ const RedisStore = require('connect-redis')(session);
 
 export default (
     app: Express,
-    passport: PassportStatic,
     sessionKonfigurasjon: ISessionKonfigurasjon,
 ) => {
     app.use(cookieParser(sessionKonfigurasjon.cookieSecret));
@@ -65,7 +64,4 @@ export default (
             }),
         );
     }
-
-  //  app.use(passport.initialize());
-  //  app.use(passport.session());
 };

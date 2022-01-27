@@ -5,11 +5,8 @@ import { hasValidAccessToken } from './tokenUtils';
 
 export const ensureAuthenticated = (sendUnauthorized: boolean) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-
-        console.log('request: ', req);
-        
+  
         const validAccessToken = hasValidAccessToken(req);
-        console.log('valid accessToken: ', validAccessToken);
         
         if (validAccessToken) {
             return next();            
