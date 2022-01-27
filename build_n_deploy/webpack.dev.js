@@ -16,7 +16,7 @@ const config = merge.strategy({
         ],
     },
     output: {
-        path: path.join(__dirname, '../../frontend_development'),
+        path: path.join(__dirname, '../frontend_development'),
         filename: '[name].[hash].js',
         publicPath: '/assets/',
         globalObject: 'this',

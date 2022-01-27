@@ -14,7 +14,7 @@ const config = merge.strategy({
         'yrkesskade-melding-mottak': ['babel-polyfill'],
     },
     output: {
-        path: path.join(__dirname, '../../frontend_production'),
+        path: path.join(__dirname, '../frontend_production'),
         filename: '[name].[contenthash].js',
         publicPath: '/assets/',
     },
