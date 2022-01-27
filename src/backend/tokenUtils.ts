@@ -27,9 +27,11 @@ export const hasValidAccessToken = (req: Request) => {
     const jwks = process.env.AZURE_APP_JWKS;
     const clientId = process.env.AZURE_APP_CLIENT_ID;
     const jwk = process.env.AZURE_APP_JWK;
+    console.log('Token: ', token);
+    
     console.log('JWK: ', jwk);
     
-    const pem = jwkToPem(JSON.parse(jwk));
+    const pem = jwkToPem(JSON.parse(jwk), { private: true });
     
     console.log('PEM', pem);
     
