@@ -1,13 +1,21 @@
 import { Request } from 'express';
-import jwt from 'jsonwebtoken';
-import jwkToPem from 'jwk-to-pem';
+import { jwtVerify } from 'jose/jwt/verify'
+import { createRemoteJWKSet } from 'jose/jwks/remote';
+import {
+    FlattenedJWSInput,
+    GetKeyFunction,
+    JWSHeaderParameters,
+    JWTVerifyResult,
+} from 'jose/types';
 
 const loggOgReturnerOmTokenErGyldig = (req: Request, key: string, validAccessToken: boolean) => {
     console.log(req, `Har ${validAccessToken ? 'gyldig' : 'ikke gyldig'} token for key '${key}'`);
     return validAccessToken;
 };
 
-export const hasValidAccessToken = (req: Request) => {
+let remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
+
+export const hasValidAccessToken = async (req: Request) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
@@ -20,30 +28,26 @@ export const hasValidAccessToken = (req: Request) => {
         return false;
     }
 
-    const jwks = process.env.AZURE_APP_JWKS;
-    const clientId = process.env.AZURE_APP_CLIENT_ID;
-    const jwk = process.env.AZURE_APP_JWK;
     console.log(token);
 
-    console.log('JWK: ', jwk);
-
-    const pem = jwkToPem(JSON.parse(jwk));
-
-    console.log('PEM', pem);
-
-    jwt.verify(
-        token,
-        pem,
-        {
-            algorithms: ['RS256'],
-            audience: process.env.AZURE_APP_CLIENT_ID,
-            issuer: process.env.AZURE_OPENID_CONFIG_ISSUER,
-        },
-        (err, decoded) => {
-            console.log('error: ', err);
-            console.log('decoded:', decoded);
-        }
-    );
+    const resultat = await validerToken(token);
+    console.log(resultat);
 
     return true;
+};
+
+const validerToken = async (token: string) => {
+    return await jwtVerify(token, await jwks(), {
+        algorithms: ['RS256'],
+        audience: process.env.AZURE_APP_CLIENT_ID,
+        issuer: process.env.AZURE_OPENID_CONFIG_ISSUER
+    });
+}
+
+const jwks = async () => {
+    if (typeof remoteJWKSet === 'undefined') {
+        remoteJWKSet = createRemoteJWKSet(new URL(process.env.AZURE_APP_WELL_KNOWN_URL));
+    }
+
+    return remoteJWKSet;
 };
