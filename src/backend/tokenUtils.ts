@@ -25,8 +25,14 @@ export const hasValidAccessToken = (req: Request) => {
 
     const jwks = process.env.AZURE_APP_JWKS;
     const clientId = process.env.AZURE_APP_CLIENT_ID;
+    const jwk = process.env.AZURE_APP_JWK;
 
-    jwt.verify(token, jwks, { "audience": clientId }, function(err, decoded) {
+    console.log('clientId: ', clientId);
+    console.log('jwks: ', jwks);
+    console.log('jwk: ', jwk);
+    
+    
+    jwt.verify(token, jwk, { "audience": clientId }, function(err, decoded) {
         console.log('decoded:' ,decoded)
     });
 
