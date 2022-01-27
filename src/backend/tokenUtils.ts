@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-import jwkToPem from 'jwkToPem';
+import jwkToPem from 'jwk-to-pem';
 
 const loggOgReturnerOmTokenErGyldig = (req: Request, key: string, validAccessToken: boolean) => {
     console.log(
@@ -27,7 +27,7 @@ export const hasValidAccessToken = (req: Request) => {
     const jwks = process.env.AZURE_APP_JWKS;
     const clientId = process.env.AZURE_APP_CLIENT_ID;
     const jwk = process.env.AZURE_APP_JWK;
-    const pem = jwkToPem(jwk);
+    const pem = jwkToPem(JSON.parse(jwk));
     
     jwt.verify(token, pem, { "audience": clientId }, function(err, decoded) {
         console.log('error: ', err);        
