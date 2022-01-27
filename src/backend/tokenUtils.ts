@@ -46,7 +46,7 @@ const validerToken = async (token: string) => {
 
 const jwks = async () => {
     if (typeof remoteJWKSet === 'undefined') {
-        remoteJWKSet = createRemoteJWKSet(new URL(process.env.AZURE_APP_WELL_KNOWN_URL));
+        remoteJWKSet = createRemoteJWKSet(new URL(process.env.AZURE_OPENID_CONFIG_JWKS_URI));
     }
 
     return remoteJWKSet;
