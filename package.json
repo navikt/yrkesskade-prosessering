@@ -45,7 +45,7 @@
     "helmet": "^3.22.0",
     "http-proxy-middleware": "^1.0.6",
     "https-proxy-agent": "^5.0.0",
-    "jose": "3.19.0",
+    "jose": "^4.4.0",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.5",
     "lodash.throttle": "^4.1.1",

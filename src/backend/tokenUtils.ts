@@ -1,43 +1,38 @@
 import { Request } from 'express';
-import { jwtVerify } from 'jose/jwt/verify'
-import { createRemoteJWKSet } from 'jose/jwks/remote';
-import {
-    FlattenedJWSInput,
-    GetKeyFunction,
-    JWSHeaderParameters,
-    JWTVerifyResult,
-} from 'jose/types';
+import * as jose from 'jose'
+import { GetKeyFunction } from 'jose/dist/types/types';
 
-const loggOgReturnerOmTokenErGyldig = (req: Request, key: string, validAccessToken: boolean) => {
-    console.log(req, `Har ${validAccessToken ? 'gyldig' : 'ikke gyldig'} token for key '${key}'`);
-    return validAccessToken;
-};
-
-let remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
+let remoteJWKSet: GetKeyFunction<jose.JWSHeaderParameters, jose.FlattenedJWSInput>;
 
 export const hasValidAccessToken = async (req: Request) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
+        // ugyldig
         return false;
     }
 
     const token = authHeader.split(' ')[1];
 
     if (!token) {
+        // ugyldig
         return false;
     }
 
-    console.log(token);
-
+    // valider token mot JWKS
     const resultat = await validerToken(token);
-    console.log(resultat);
 
-    return true;
+    return resultat.payload && resultat.protectedHeader;
 };
 
-const validerToken = async (token: string) => {
-    return await jwtVerify(token, await jwks(), {
+/**
+ * Validerer token mot algoritme, clientId og issuer
+ * 
+ * @param token 
+ * @returns 
+ */
+const validerToken = async (token: string): Promise<jose.JWTVerifyResult> => {
+    return await jose.jwtVerify(token, await jwks(), {
         algorithms: ['RS256'],
         audience: process.env.AZURE_APP_CLIENT_ID,
         issuer: process.env.AZURE_OPENID_CONFIG_ISSUER
@@ -46,7 +41,7 @@ const validerToken = async (token: string) => {
 
 const jwks = async () => {
     if (typeof remoteJWKSet === 'undefined') {
-        remoteJWKSet = createRemoteJWKSet(new URL(process.env.AZURE_OPENID_CONFIG_JWKS_URI));
+        remoteJWKSet = jose.createRemoteJWKSet(new URL(process.env.AZURE_OPENID_CONFIG_JWKS_URI));
     }
 
     return remoteJWKSet;
