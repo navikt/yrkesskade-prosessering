@@ -4,7 +4,6 @@ import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { getOnBehalfOfAccessToken } from 'tokenUtils';
 import { v4 as uuidv4 } from 'uuid';
-import { oboConfig } from './config';
 import { IService } from './serviceConfig';
 
 const restream = (proxyReq: ClientRequest, req: Request, res: Response) => {
@@ -30,7 +29,7 @@ export const doProxy = (service: IService) => {
     });
 };
 
-export const attachToken = (service: IService) => {
+export const attachToken = () => {
     return async (req: Request, _res: Response, next: NextFunction) => {
         getOnBehalfOfAccessToken(req)
             .then((accessToken: string) => {

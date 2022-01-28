@@ -5,7 +5,7 @@ import path from 'path';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import { doProxy } from './proxy';
+import { attachToken, doProxy } from './proxy';
 import setupRouter from './router';
 import { IService, serviceConfig } from './serviceConfig';
 import { sessionConfig } from './config';
@@ -44,7 +44,7 @@ serviceConfig.map((service: IService) => {
     app.use(
         service.proxyPath,
         ensureAuthenticated(true),
-        attachToken(service),
+        attachToken(),
         doProxy(service)
     );
 });
