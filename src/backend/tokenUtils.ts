@@ -6,7 +6,8 @@ let remoteJWKSet: GetKeyFunction<jose.JWSHeaderParameters, jose.FlattenedJWSInpu
 
 export const hasValidAccessToken = async (req: Request) => {
     const authHeader = req.headers.authorization;
-
+    console.log('resultat: ', authHeader);
+    
     if (!authHeader) {
         // ugyldig
         return false;

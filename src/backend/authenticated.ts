@@ -7,6 +7,7 @@ export const ensureAuthenticated = (sendUnauthorized: boolean) => {
     return async (req: Request, res: Response, next: NextFunction) => {
   
         const validAccessToken = hasValidAccessToken(req);
+        console.log('valid token: ', validAccessToken);
         
         if (validAccessToken) {
             return next();            
