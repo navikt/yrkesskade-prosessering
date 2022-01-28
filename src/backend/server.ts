@@ -44,7 +44,7 @@ serviceConfig.map((service: IService) => {
     app.use(
         service.proxyPath,
         ensureAuthenticated(true),
-        //     attachToken(azureAuthClient, service),
+        attachToken(service),
         doProxy(service)
     );
 });

@@ -46,3 +46,19 @@ const jwks = async () => {
 
     return remoteJWKSet;
 };
+
+export const getOnBehalfOfAccessToken = (
+    req: Request
+): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        if (hasValidAccessToken(req)) {
+
+            const authHeader = req.headers.authorization;
+    
+            const token = authHeader.split(' ')[1];
+
+            resolve(token);
+        }
+        reject(new Error('Har ikke gyldig token'))
+    });
+};

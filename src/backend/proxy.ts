@@ -2,6 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { getOnBehalfOfAccessToken } from 'tokenUtils';
 import { v4 as uuidv4 } from 'uuid';
 import { oboConfig } from './config';
 import { IService } from './serviceConfig';
@@ -29,9 +30,9 @@ export const doProxy = (service: IService) => {
     });
 };
 
-/*export const attachToken = (authClient: Client, service: IService) => {
+export const attachToken = (service: IService) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
-        getOnBehalfOfAccessToken(authClient, req, oboConfig(service))
+        getOnBehalfOfAccessToken(req)
             .then((accessToken: string) => {
                 req.headers['Nav-Call-Id'] = uuidv4();
                 req.headers.Authorization = `Bearer ${accessToken}`;
@@ -55,4 +56,3 @@ export const doProxy = (service: IService) => {
             });
     };
 };
-*/
