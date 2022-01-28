@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { getOnBehalfOfAccessToken } from 'tokenUtils';
+import { getOnBehalfOfAccessToken } from './tokenUtils';
 import { v4 as uuidv4 } from 'uuid';
 import { IService } from './serviceConfig';
 
