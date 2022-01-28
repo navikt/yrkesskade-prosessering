@@ -1,7 +1,6 @@
 import { Express } from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import { PassportStatic } from 'passport';
 import redis from 'redis';
 //import { appConfig } from '../config';
 import { ISessionKonfigurasjon } from './typer';
