@@ -2,9 +2,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { getOnBehalfOfAccessToken } from './tokenUtils';
+import { getOnBehalfOfAccessToken } from './auth/tokenUtils';
 import { v4 as uuidv4 } from 'uuid';
 import { IService } from './serviceConfig';
+import { Client } from 'openid-client';
+import { oboConfig } from './config';
 
 const restream = (proxyReq: ClientRequest, req: Request, res: Response) => {
     if (req.body) {
@@ -29,9 +31,9 @@ export const doProxy = (service: IService) => {
     });
 };
 
-export const attachToken = () => {
+export const attachToken = (authClient: Client, service: IService) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
-        getOnBehalfOfAccessToken(req)
+        getOnBehalfOfAccessToken(authClient, req, oboConfig(service))
             .then((accessToken: string) => {
                 req.headers['Nav-Call-Id'] = uuidv4();
                 req.headers.Authorization = `Bearer ${accessToken}`;
@@ -39,14 +41,14 @@ export const attachToken = () => {
             })
             .catch((e) => {
                 if (e.error === 'invalid_grant') {
-                    console.log(`invalid_grant`);
+                    console.warn(`invalid_grant`);
                     _res.status(500).json({
                         status: 'IKKE_TILGANG',
                         frontendFeilmelding:
                             'Uventet feil. Det er mulig at du ikke har tilgang til applikasjonen.',
                     });
                 } else {
-                    console.error(`Uventet feil - getOnBehalfOfAccessToken  ${e}`);
+                    console.error(`Uventet feil - getOnBehalfOfAccessToken`, e);
                     _res.status(500).json({
                         status: 'FEILET',
                         frontendFeilmelding: 'Uventet feil. Vennligst prøv på nytt.',

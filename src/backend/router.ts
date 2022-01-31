@@ -3,8 +3,8 @@ import path from 'path';
 import { buildPath } from './config';
 import { IService, serviceConfig } from './serviceConfig';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
-import { ensureAuthenticated } from './authenticated';
-import { hentBrukerprofil } from './bruker';
+import { ensureAuthenticated } from './auth/authenticated';
+import { hentBrukerprofil } from './auth/bruker';
 import { Counter } from '@navikt/familie-backend';
 
 export default (

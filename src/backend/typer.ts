@@ -6,3 +6,8 @@ export interface ISessionKonfigurasjon {
     sessionMaxAgeSekunder?: number;
     cookieSecret: string | string[];
 }
+
+export interface IApi {
+    clientId: string;
+    scopes: string[];
+}
