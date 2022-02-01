@@ -5,7 +5,7 @@ import { IService, serviceConfig } from './serviceConfig';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
 import { ensureAuthenticated } from './auth/authenticated';
 import { hentBrukerprofil } from './auth/bruker';
-import { Counter } from '@navikt/familie-backend';
+import { Counter } from 'prom-client';
 
 export default (
     middleware?: WebpackDevMiddleware.WebpackDevMiddleware
