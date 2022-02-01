@@ -1,5 +1,6 @@
 import { ISessionKonfigurasjon } from './typer';
 import { IService, utledScope } from './serviceConfig';
+import dotenv from 'dotenv';
 
 // Miljøvariabler
 const Environment = () => {
@@ -22,6 +23,8 @@ const Environment = () => {
 };
 
 const env = Environment();
+
+dotenv.config();
 
 export const oboConfig = (service: IService) => {
     return {
