@@ -8,14 +8,8 @@ let remoteJWKSet: GetKeyFunction<jose.JWSHeaderParameters, jose.FlattenedJWSInpu
 
 export const tokenSetSelfId = 'self';
 export const hasValidAccessToken = async (req: Request) => {
-    const authHeader = req.headers.authorization;
     
-    if (!authHeader) {
-        // ugyldig
-        return false;
-    }
-
-    const token = authHeader.split(' ')[1];
+    const token = getTokenFromHeader(req);
 
     if (!token) {
         // ugyldig
@@ -27,6 +21,22 @@ export const hasValidAccessToken = async (req: Request) => {
     
     return resultat.payload && resultat.protectedHeader;
 };
+
+const getTokenFromHeader = (req: Request): string => {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader) {
+        return undefined;
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+        return undefined;
+    }
+
+    return token;
+}
 
 /**
  * Validerer token mot algoritme, clientId og issuer
@@ -93,11 +103,11 @@ export const getOnBehalfOfAccessToken = (
                 throw Error('Session på request mangler.');
             }
 
-            console.log('Passport: ', req.session.passport);
+            const selfToken = getTokenFromHeader(req);
             
             authClient
                 .grant({
-                    assertion: req.session.passport.user.tokenSets[tokenSetSelfId].access_token,
+                    assertion: selfToken,
                     client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                     grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                     requested_token_use: 'on_behalf_of',
