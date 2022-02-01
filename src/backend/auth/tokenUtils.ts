@@ -93,6 +93,8 @@ export const getOnBehalfOfAccessToken = (
                 throw Error('Session på request mangler.');
             }
 
+            console.log('Passport: ', req.session.passport);
+            
             authClient
                 .grant({
                     assertion: req.session.passport.user.tokenSets[tokenSetSelfId].access_token,

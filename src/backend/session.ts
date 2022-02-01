@@ -48,7 +48,7 @@ export default (
                 name: sessionKonfigurasjon.navn,
                 resave: false,
                 saveUninitialized: false,
-                secret: 'test',
+                secret: sessionKonfigurasjon.cookieSecret,
                 store,
             }),
         );
@@ -61,7 +61,7 @@ export default (
                 name: sessionKonfigurasjon.navn,
                 resave: false,
                 saveUninitialized: false,
-                secret: 'test',
+                secret: sessionKonfigurasjon.cookieSecret,
             }),
         );
     }
