@@ -3,7 +3,9 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { ISessionKonfigurasjon } from './typer';
 import { PassportStatic } from 'passport';
+import { TokenSet } from 'openid-client';
 
+export const tokenSetsByClientId: { [key: string]: TokenSet } = {};
 
 export default (
     app: Express,

@@ -2,6 +2,7 @@ import { Request } from 'express';
 import * as jose from 'jose'
 import { GetKeyFunction } from 'jose/dist/types/types';
 import { Client, TokenSet } from 'openid-client';
+import { tokenSetsByClientId } from 'session';
 import { IApi } from '../typer';
 
 let remoteJWKSet: GetKeyFunction<jose.JWSHeaderParameters, jose.FlattenedJWSInput>;
@@ -118,7 +119,8 @@ export const getOnBehalfOfAccessToken = (
                         throw Error('Mangler session på request.');
                     }
 
-                    req.session.passport.user.tokenSets[api.clientId] = tokenSet;
+                    tokenSetsByClientId[api.clientId] = tokenSet;
+                    //req.session.passport.user.tokenSets[api.clientId] = tokenSet;
 
                     if (tokenSet.access_token) {
                         resolve(tokenSet.access_token);
@@ -135,11 +137,10 @@ export const getOnBehalfOfAccessToken = (
 };
 
 export const getTokenSetsFromSession = (req: Request) => {
-    if (req && req.session && req.session.passport) {
+    /*if (req && req.session && req.session.passport) {
         return req.session.passport.user.tokenSets;
-    }
-
-    return undefined;
+    }*/
+    return tokenSetsByClientId;
 };
 
 const loggOgReturnerOmTokenErGyldig = (req: Request, key: string, validAccessToken: boolean) => {
