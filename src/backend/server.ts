@@ -28,7 +28,7 @@ const app = express();
 
 dotenv.config();
 
-konfigurerSesjon(app, sessionConfig);
+konfigurerSesjon(app, passport, sessionConfig);
 
 konfigurerPassport(passport).then((azureClient) => {
 
