@@ -140,6 +140,8 @@ const loggOgReturnerOmTokenErGyldig = (req: Request, key: string, validAccessTok
 
 export const hasValidAccessTokenInSession = (req: Request, key = tokenSetSelfId) => {
     const tokenSets = getTokenSetsFromSession(req);
+    console.log('Tokensets: ', tokenSets);
+    
     if (!tokenSets) {
         return loggOgReturnerOmTokenErGyldig(req, key, false);
     }
