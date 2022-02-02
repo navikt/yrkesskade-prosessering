@@ -29,7 +29,7 @@ export const ensureAuthenticated = (client: Client, sendUnauthorized: boolean) =
 }
 
 export const authenticateAzure = (req: Request, res: Response, next: NextFunction) => {
-    const successRedirect = req.originalUrl;
+    const successRedirect = '/';//req.originalUrl;
 
     console.log(
         `authenticateAzure. redirectUrl=${req.originalUrl}, successRedirect=${successRedirect}`
