@@ -12,8 +12,11 @@ export const ensureAuthenticated = (client: Client, sendUnauthorized: boolean) =
         const validAccessToken = await hasValidAccessToken(req); //  hasValidAccessTokenInSession(req);
     
         if (validAccessToken) {
-            passport.authenticate('jwt')(req, res, next);  
-            return setBrukerprofilPåSesjon(client, req, next);
+            passport.authenticate('jwt', (req: Request, res: Response, next: NextFunction) => {
+                console.log('authenticated');
+                
+                return setBrukerprofilPåSesjon(client, req, next);
+            });  
         }
 
         const pathname = req.originalUrl;
