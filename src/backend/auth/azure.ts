@@ -1,14 +1,14 @@
 import {
     Client,
     ClientMetadata,
-    custom,
     Issuer,
     Strategy,
     StrategyOptions,
     TokenSet,
 } from 'openid-client';
-import { appendDefaultScope, tokenSetSelfId } from './tokenUtils';
+import { appendDefaultScope, hasValidAccessToken, tokenSetSelfId, validerToken } from './tokenUtils';
 import dotenv from 'dotenv';
+import * as JwtPassport from 'passport-jwt'
 
 dotenv.config();
 
@@ -55,4 +55,37 @@ const strategy = (client: Client) => {
     return new Strategy(options, verify);
 };
 
-export default { hentClient, strategy };
+const jwtStrategy = () => {
+    const verify = (token: string, done: (err: any, _: any) => void) => {
+        validerToken(token).then((jwtVerifyResult) => {
+            console.log('valider token: ', jwtVerifyResult);
+            
+            if (!jwtVerifyResult) {
+                return done(undefined, undefined);
+            }
+
+            if (jwtVerifyResult.protectedHeader) {
+                const tokenSet = new TokenSet(jwtVerifyResult.payload);
+                console.log('tokenset: ', tokenSet);
+                
+                done(undefined, {
+                    claims: tokenSet.claims,
+                    tokenSets: {
+                        [tokenSetSelfId]: tokenSet,
+                    },
+                })
+            }
+        })
+    };
+
+    const options: JwtPassport.StrategyOptions = {
+        jwtFromRequest: JwtPassport.ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: 'secret',
+        issuer: process.env.AZURE_OPENID_CONFIG_ISSUER,
+        audience: process.env.AZURE_APP_CLIENT_ID
+    }
+
+    return new JwtPassport.Strategy(options, verify)
+}
+
+export default { hentClient, strategy, jwtStrategy };

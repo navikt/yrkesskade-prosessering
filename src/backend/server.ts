@@ -10,7 +10,7 @@ import { attachToken, doProxy } from './proxy';
 import setupRouter from './router';
 import { IService, serviceConfig } from './serviceConfig';
 import { sessionConfig } from './config';
-import { ensureAuthenticated } from './auth/authenticated';
+import { ensureAuthenticated } from './auth/authenticate';
 import konfigurerSesjon from './session';
 import konfigurerPassport from './auth/passport';
 

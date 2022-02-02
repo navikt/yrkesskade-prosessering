@@ -3,7 +3,7 @@ import path from 'path';
 import { buildPath } from './config';
 import { IService, serviceConfig } from './serviceConfig';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
-import { ensureAuthenticated } from './auth/authenticated';
+import { ensureAuthenticated } from './auth/authenticate';
 import { hentBrukerprofil } from './auth/bruker';
 import { Counter } from 'prom-client';
 

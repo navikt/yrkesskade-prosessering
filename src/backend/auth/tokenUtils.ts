@@ -44,7 +44,7 @@ const getTokenFromHeader = (req: Request): string => {
  * @param token 
  * @returns 
  */
-const validerToken = async (token: string): Promise<jose.JWTVerifyResult> => {
+export const validerToken = async (token: string): Promise<jose.JWTVerifyResult> => {
     return await jose.jwtVerify(token, await jwks(), {
         algorithms: ['RS256'],
         audience: process.env.AZURE_APP_CLIENT_ID,

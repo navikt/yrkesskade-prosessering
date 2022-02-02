@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Client, TokenSet } from 'openid-client';
-import  session from 'express-session';
+import { getOnBehalfOfAccessToken, getTokenSetsFromSession, tokenSetSelfId } from './tokenUtils';
+import request from 'request-promise';
 
 // Hent brukerprofil fra sesjon
 export const hentBrukerprofil = () => {
@@ -17,7 +18,7 @@ export const hentBrukerprofil = () => {
  * Funksjon som henter brukerprofil fra graph.
  * Bruker node-fetch da axios ikke bryr seg om proxy agent som sendes inn.
  */
-export const setBrukerprofilPåSesjon = (req: Request, next: NextFunction) => {
+export const setBrukerprofilPåSesjon = (authClient: Client, req: Request, next: NextFunction) => {
     return new Promise((_, _reject) => {
         const api = {
             clientId: 'https://graph.microsoft.com',
@@ -28,12 +29,10 @@ export const setBrukerprofilPåSesjon = (req: Request, next: NextFunction) => {
             return next();
         }
 
-        return next();
-
         const query =
             'onPremisesSamAccountName,displayName,mail,officeLocation,userPrincipalName,id';
         const graphUrl = `${process.env.GRAPH_API}?$select=${query}`;
-       /* getOnBehalfOfAccessToken(authClient, req, api)
+        getOnBehalfOfAccessToken(authClient, req, api)
             .then((accessToken: any) =>
                 request.get(
                     {
@@ -44,8 +43,8 @@ export const setBrukerprofilPåSesjon = (req: Request, next: NextFunction) => {
                     },
                     (_err, _httpResponse, body) => {
                         return body;
-                    },
-                ),
+                    }
+                )
             )
             .then((response: any) => {
                 if (!req.session) {
@@ -81,10 +80,11 @@ export const setBrukerprofilPåSesjon = (req: Request, next: NextFunction) => {
                     enhet: '9999',
                 };
 
-                console.error(`Feilet mot ms graph: ${err.message}. Fortsetter uten data fra bruker.`,);
-              
+                console.error(
+                    `Feilet mot ms graph: ${err.message}. Fortsetter uten data fra bruker.`
+                );
+
                 return next();
             });
-            */
     });
 };
