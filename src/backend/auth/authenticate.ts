@@ -4,18 +4,15 @@ import { NextFunction, Request, Response} from 'express';
 import { Client } from 'openid-client';
 import passport from 'passport';
 import { setBrukerprofilPåSesjon } from './bruker';
-import { hasValidAccessTokenInSession } from './tokenUtils';
+import { hasValidAccessToken, hasValidAccessTokenInSession } from './tokenUtils';
 
 export const ensureAuthenticated = (client: Client, sendUnauthorized: boolean) => {
     return async (req: Request, res: Response, next: NextFunction) => {
   
-        const validAccessToken = hasValidAccessTokenInSession(req);
+        const validAccessToken = await hasValidAccessToken(req); //  hasValidAccessTokenInSession(req);
     
-        if(req.isAuthenticated()) {
-            if (!validAccessToken) {
-                passport.authenticate('jwt')(req, res, next);  
-            }
-
+        if (validAccessToken) {
+            passport.authenticate('jwt')(req, res, next);  
             return setBrukerprofilPåSesjon(client, req, next);
         }
 
