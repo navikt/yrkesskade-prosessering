@@ -52,7 +52,7 @@ konfigurerPassport(passport).then((azureClient) => {
     serviceConfig.map((service: IService) => {
         app.use(
             service.proxyPath,
-            ensureAuthenticated(true),
+            ensureAuthenticated(azureClient, true),
             attachToken(azureClient, service),
             doProxy(service)
         );
@@ -61,7 +61,7 @@ konfigurerPassport(passport).then((azureClient) => {
     // Sett opp bodyParser og router etter proxy. Spesielt viktig med tanke på større payloads som blir parset av bodyParser
     app.use(bodyParser.json({ limit: '200mb' }));
     app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
-    app.use('/', setupRouter(middleware));
+    app.use('/', setupRouter(azureClient, middleware));
     
     app.listen(port, '0.0.0.0', () => {
         loglevel.info(

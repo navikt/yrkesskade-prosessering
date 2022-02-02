@@ -6,12 +6,14 @@ import WebpackDevMiddleware from 'webpack-dev-middleware';
 import { ensureAuthenticated } from './auth/authenticate';
 import { hentBrukerprofil } from './auth/bruker';
 import { Counter } from 'prom-client';
+import { Client } from 'openid-client';
 
 export default (
+    client: Client,
     middleware?: WebpackDevMiddleware.WebpackDevMiddleware
 ) => {
 
-    const router = konfigurerRouter();
+    const router = konfigurerRouter(client);
 
     router.get('/version', (req, res) => {
         res.status(200).send({ version: process.env.APP_VERSION }).end();
@@ -35,7 +37,7 @@ export default (
 
     // APP
     if (process.env.NODE_ENV === 'development') {
-        router.get('*', ensureAuthenticated(false), (req: Request, res: Response) => {
+        router.get('*', ensureAuthenticated(client, false), (req: Request, res: Response) => {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.write(
                 middleware.fileSystem.readFileSync(path.join(__dirname, `${buildPath}/index.html`))
@@ -43,7 +45,7 @@ export default (
             res.end();
         });
     } else {
-        router.get('*', ensureAuthenticated(false), (req: Request, res: Response) => {
+        router.get('*', ensureAuthenticated(client, false), (req: Request, res: Response) => {
             res.sendFile('index.html', { root: path.join(__dirname, buildPath) });
         });
     }
@@ -51,12 +53,12 @@ export default (
     return router;
 };
 
-const konfigurerRouter = (prometheusTellere?: { [key: string]: Counter<string> }) => {
+const konfigurerRouter = (client: Client, prometheusTellere?: { [key: string]: Counter<string> }) => {
    
     const router = express.Router();
 
     // Bruker
-    router.get('/user/profile', ensureAuthenticated(true), hentBrukerprofil());
+    router.get('/user/profile', ensureAuthenticated(client, true), hentBrukerprofil());
 
     return router;
 };
