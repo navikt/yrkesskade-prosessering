@@ -1,9 +1,9 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import path from 'path';
 import { buildPath } from './config';
 import { IService, serviceConfig } from './serviceConfig';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
-import { ensureAuthenticated } from './auth/authenticate';
+import { authenticateAzure, ensureAuthenticated } from './auth/authenticate';
 import { hentBrukerprofil } from './auth/bruker';
 import { Counter } from 'prom-client';
 import { Client } from 'openid-client';
@@ -56,6 +56,15 @@ export default (
 const konfigurerRouter = (client: Client, prometheusTellere?: { [key: string]: Counter<string> }) => {
    
     const router = express.Router();
+
+    // Authentication
+    router.get('/login', (req: Request, res: Response, next: NextFunction) => {
+        if (prometheusTellere && prometheusTellere.login_route) {
+            prometheusTellere.login_route.inc();
+        }
+
+        authenticateAzure(req, res, next);
+    });
 
     // Bruker
     router.get('/user/profile', ensureAuthenticated(client, true), hentBrukerprofil());

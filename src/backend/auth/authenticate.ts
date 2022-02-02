@@ -23,7 +23,30 @@ export const ensureAuthenticated = (client: Client, sendUnauthorized: boolean) =
         if (sendUnauthorized) {
             res.status(401).send('Unauthorized');
         } else {
-            res.redirect(`/oauth2/login?redirectUrl=${pathname}`);
+            res.redirect(`/login`);
         }
     };
 }
+
+export const authenticateAzure = (req: Request, res: Response, next: NextFunction) => {
+    const successRedirect = req.originalUrl;
+
+    console.log(
+        `authenticateAzure. redirectUrl=${req.originalUrl}, successRedirect=${successRedirect}`
+    );
+
+    if (!req.session) {
+        throw new Error('Mangler sesjon på kall');
+    }
+
+    req.session.redirectUrl = successRedirect;
+    const pathName = req.originalUrl;
+    try {
+        passport.authenticate('jwt', {
+            failureRedirect: `/oauth2/login?redirectUrl=${pathName}`,
+            successRedirect,
+        })(req, res, next);
+    } catch (err) {
+        throw new Error(`Error during authentication: ${err}`);
+    }
+};
