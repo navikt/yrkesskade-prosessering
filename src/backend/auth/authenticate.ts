@@ -12,18 +12,20 @@ export const ensureAuthenticated = (client: Client, sendUnauthorized: boolean) =
         const validAccessToken = await hasValidAccessToken(req); //  hasValidAccessTokenInSession(req);
     
         if (validAccessToken) {
-            passport.authenticate('jwt', (req: Request, res: Response, next: NextFunction) => {
+            /*passport.authenticate('jwt', (req: Request, res: Response, next: NextFunction) => {
                 console.log('authenticated');
                 
                 return setBrukerprofilPåSesjon(client, req, next);
             });  
+            */
+           return next();
         }
 
-        const pathname = req.originalUrl;
+        const pathName = req.originalUrl;
         if (sendUnauthorized) {
             res.status(401).send('Unauthorized');
         } else {
-            res.redirect(`/login`);
+            res.redirect(`/oauth2/login?redirectUrl=${pathName}`);
         }
     };
 }

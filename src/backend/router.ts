@@ -58,13 +58,13 @@ const konfigurerRouter = (client: Client, prometheusTellere?: { [key: string]: C
     const router = express.Router();
 
     // Authentication
-    router.get('/login', (req: Request, res: Response, next: NextFunction) => {
+    /*router.get('/login', (req: Request, res: Response, next: NextFunction) => {
         if (prometheusTellere && prometheusTellere.login_route) {
             prometheusTellere.login_route.inc();
         }
 
         authenticateAzure(req, res, next);
-    });
+    });*/
 
     // Bruker
     router.get('/user/profile', ensureAuthenticated(client, true), hentBrukerprofil());

@@ -53,7 +53,7 @@ konfigurerPassport(passport).then((azureClient) => {
         app.use(
             service.proxyPath,
             ensureAuthenticated(azureClient, true),
-            attachToken(azureClient, service),
+            //attachToken(azureClient, service),
             doProxy(service)
         );
     });
