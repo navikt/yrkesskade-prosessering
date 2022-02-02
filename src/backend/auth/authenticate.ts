@@ -16,7 +16,7 @@ export const ensureAuthenticated = (sendUnauthorized: boolean) => {
             const result = passport.authenticate('jwt')(req, res, next);   
             console.log('result', result);
             
-            return next();    
+            return;
         }
 
         const pathname = req.originalUrl;
