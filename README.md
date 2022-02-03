@@ -1,4 +1,4 @@
-# familie-prosessering
+# yrkesskade-proessering
 
 Frontend applikasjon for monitorering og håndtering av prosesstasks for familieområdet
 
@@ -21,13 +21,13 @@ For at lokal-secret skal fungere må applikasjonen du skal nå (mottak, sak, ive
 spec:
   preAuthorizedApplications:
     ...
-    - application: familie-prosessering-lokal
+    - application: yrkesskade-proessering-lokal
       cluster: dev-gcp
       namespace: teamfamilie
 ```
 
 Appen krever en del environment variabler og legges til i .env fila i root på prosjektet.
-secret kan hentes fra cluster med `kubectl -n teamfamilie get secret azuread-familie-prosessering-lokal -o json | jq '.data | map_values(@base64d)'`
+secret kan hentes fra cluster med `kubectl -n teamfamilie get secret azuread-yrkesskade-proessering-lokal -o json | jq '.data | map_values(@base64d)'`
 
 Bruk override_scope for å sette scope manuelt for den applikasjonen du vil kjøre mot lokalt
 ```

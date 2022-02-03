@@ -4,7 +4,7 @@ const TypeScriptTypeChecker = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
     entry: {
-        'familie-ks-mottak': ['./src/frontend/index.tsx'],
+        'yrkesskade-prosessering': ['./src/frontend/index.tsx'],
     },
     devtool: 'source-map',
     resolve: {

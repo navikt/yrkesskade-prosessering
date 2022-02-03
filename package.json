@@ -1,8 +1,8 @@
 {
-  "name": "familie-prosessering",
+  "name": "yrkesskade-proessering",
   "version": "0.0.1",
   "main": "node_dist/server.js",
-  "repository": "https://github.com/navikt/familie-prosessering.git",
+  "repository": "https://github.com/navikt/yrkesskade-proessering.git",
   "author": "Henning Håkonsen",
   "license": "MIT",
   "scripts": {

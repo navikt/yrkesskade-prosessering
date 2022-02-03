@@ -38,7 +38,7 @@ if (!cookieSecret) {
 }
 export const sessionConfig: ISessionKonfigurasjon = {
     cookieSecret: cookieSecret,
-    navn: 'familie-prosessering',
+    navn: 'yrkesskade-proessering',
     secureCookie: process.env.ENV === 'local' ? false : true,
 };
 

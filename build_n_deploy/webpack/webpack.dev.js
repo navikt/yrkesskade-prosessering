@@ -4,12 +4,12 @@ const { mergeWithCustomize } = require('webpack-merge');
 const common = require('./webpack.common');
 
 const config = mergeWithCustomize({
-    'entry.familie-ks-mottak': 'prepend',
+    'entry.yrkesskade-prosessering': 'prepend',
     'module.rules': 'append',
 })(common, {
     mode: 'development',
     entry: {
-        'familie-ks-mottak': [
+        'yrkesskade-prosessering': [
             'babel-polyfill',
             'react-hot-loader/patch',
             'webpack-hot-middleware/client?reload=true',
