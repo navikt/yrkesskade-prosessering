@@ -1,8 +1,8 @@
 import { Express } from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import { ISessionKonfigurasjon } from './typer';
 import { PassportStatic } from 'passport';
+import { ISessionKonfigurasjon } from '@navikt/yrkesskade-backend/dist/typer';
 
 export default (
     app: Express,

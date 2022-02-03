@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { getOnBehalfOfAccessToken } from './auth/tokenUtils';
+import { getOnBehalfOfAccessToken } from '@navikt/yrkesskade-backend';
 import { v4 as uuidv4 } from 'uuid';
 import { IService } from './serviceConfig';
 import { Client } from 'openid-client';
@@ -39,7 +39,7 @@ export const attachToken = (authClient: Client, service: IService) => {
                 req.headers.Authorization = `Bearer ${accessToken}`;
                 return next();
             })
-            .catch((e) => {
+            .catch((e: any) => {
                 if (e.error === 'invalid_grant') {
                     console.warn(`invalid_grant`);
                     _res.status(500).json({

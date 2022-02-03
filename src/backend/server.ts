@@ -1,20 +1,16 @@
-import bodyParser from 'body-parser';
-import express, { Request, Response } from 'express';
-import passport from 'passport';
+import './azureConfig'; // setter miljøvariabler
+import backend, { IApp } from '@navikt/yrkesskade-backend';
 import loglevel from 'loglevel';
-import path from 'path';
+import { logInfo } from '@navikt/familie-logging';
+import { sessionConfig } from './config';
+import moment from 'moment';
+import bodyParser from 'body-parser';
+import setupRouter from './router'
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import { attachToken, doProxy } from './proxy';
-import setupRouter from './router';
-import { IService, serviceConfig } from './serviceConfig';
-import { sessionConfig } from './config';
-import { ensureAuthenticated } from './auth/authenticate';
-import konfigurerSesjon from './session';
-import konfigurerPassport from './auth/passport';
-
-import dotenv from 'dotenv';
+import express from 'express';
+import path from 'path';
 
 /* tslint:disable */
 const config = require('../build_n_deploy/webpack.dev');
@@ -22,19 +18,11 @@ const config = require('../build_n_deploy/webpack.dev');
 
 loglevel.setDefaultLevel(loglevel.levels.INFO);
 
-const port = 8000;
-const app = express();
+const port = 4000;
 
-
-dotenv.config();
-
-konfigurerSesjon(app, passport, sessionConfig);
-
-konfigurerPassport(passport).then((azureClient) => {
-
-    app.get('/isAlive', (_req: Request, res: Response) => res.status(200).end());
-    app.get('/isReady', (_req: Request, res: Response) => res.status(200).end());
-
+backend(sessionConfig).then(({ app, azureAuthClient, router }: IApp) => {
+    logInfo(`Initialiserer backend server på port ${port}`);
+    
     let middleware;
 
     if (process.env.NODE_ENV === 'development') {
@@ -49,25 +37,18 @@ konfigurerPassport(passport).then((azureClient) => {
         app.use('/assets', express.static(path.join(__dirname, '..', 'frontend_production')));
     }
 
-    serviceConfig.map((service: IService) => {
-        app.use(
-            service.proxyPath,
-            ensureAuthenticated(azureClient, true),
-            attachToken(azureClient, service),
-            doProxy(service)
-        );
-    });
-    
     // Sett opp bodyParser og router etter proxy. Spesielt viktig med tanke på større payloads som blir parset av bodyParser
     app.use(bodyParser.json({ limit: '200mb' }));
     app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
-    app.use('/', setupRouter(azureClient, middleware));
+    app.use('/', setupRouter(azureAuthClient, router, middleware));
     
     app.listen(port, '0.0.0.0', () => {
         loglevel.info(
-            `${new Date()}: server startet på port ${port}. Build version: ${process.env.APP_VERSION}.`
+            `${moment().toISOString(true)}: server startet på port ${port}. Build version: ${
+                process.env.APP_VERSION
+            }.`
         );
     }).on('error', (err) => {
-        loglevel.error(`${new Date()}: server startup failed - ${err}`);
+        loglevel.error(`${moment().toISOString(true)}: server startup failed - ${err}`);
     });
-})
+});

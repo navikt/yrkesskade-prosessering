@@ -1,6 +1,7 @@
-import { ISessionKonfigurasjon } from './typer';
+
 import { IService, utledScope } from './serviceConfig';
 import dotenv from 'dotenv';
+import { ISessionKonfigurasjon } from '@navikt/yrkesskade-backend/dist/typer';
 
 // Miljøvariabler
 const Environment = () => {

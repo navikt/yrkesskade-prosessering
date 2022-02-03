@@ -13,6 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com/
+          scope: "@navikt"
       - name: "Login to GitHub Docker Registry"
         uses: "docker/login-action@v1"
         with:
