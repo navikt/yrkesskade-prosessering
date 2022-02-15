@@ -37,7 +37,7 @@ const TaskPanel: FC<IProps> = ({ task }) => {
         to: 'now',
         mode: 'relative',
     };
-    const index = 'c95c83c0-8982-11ec-be50-97987d1e7a2e';
+    const index = 'logstash-apps-*';
     const filters: KibanaQueryFilter[] = [
         {
             type: 'query',
@@ -53,6 +53,7 @@ const TaskPanel: FC<IProps> = ({ task }) => {
         host: kibanaHost,
         columns,
         period,
+        index,
         filters: [...filters],
         query,
         refreshInterval: { pause: true, value: 0 as unknown as bigint },
