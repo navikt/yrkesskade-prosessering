@@ -37,7 +37,7 @@ const TaskPanel: FC<IProps> = ({ task }) => {
         to: 'now',
         mode: 'relative',
     };
-    const index = 'logstash-apps-*';
+    const index = 'c95c83c0-8982-11ec-be50-97987d1e7a2e';
     const filters: KibanaQueryFilter[] = [
         {
             type: 'query',
