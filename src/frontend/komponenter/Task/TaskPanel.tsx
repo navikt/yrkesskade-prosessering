@@ -53,7 +53,6 @@ const TaskPanel: FC<IProps> = ({ task }) => {
         host: kibanaHost,
         columns,
         period,
-        index,
         filters: [...filters],
         query,
         refreshInterval: { pause: true, value: 0 as unknown as bigint },
