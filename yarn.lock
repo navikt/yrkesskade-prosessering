@@ -114,13 +114,6 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@clickandmortar/kibana-url-builder@^0.7.2":
-  version "0.7.2"
-  resolved "https://registry.npmjs.org/@clickandmortar/kibana-url-builder/-/kibana-url-builder-0.7.2.tgz#33b07514bdd7502db4591d2e70481bb23c899005"
-  integrity sha512-3zQrqzSq4NxIuzfq+WLlwkAqfjwc2wUGJCHpuMA+AIvP7ocQY1m77PKCPbe67t1+Mv4NEKvek5K3PC+scu1aEQ==
-  dependencies:
-    rison "^0.1.1"
-
 "@dabh/diagnostics@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@dabh/diagnostics/-/diagnostics-2.0.2.tgz#290d08f7b381b8f94607dc8f471a12c675f9db31"
@@ -134,6 +127,13 @@
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.6.tgz#d5e0706cf8c6acd8c6032f8d54070af261bbbb2f"
   integrity sha512-ws57AidsDvREKrZKYffXddNkyaF14iHNHm8VQnZH6t99E8gczjNN0GpvcGny0imC80yQ0tHz1xVUKk/KFQSUyA==
+
+"@lurajon/kibana-url-builder@^0.7.2":
+  version "0.7.2"
+  resolved "https://registry.npmjs.org/@lurajon/kibana-url-builder/-/kibana-url-builder-0.7.2.tgz#a4b1745c6c372b8ac702a3823c09dc0f623618a0"
+  integrity sha512-krFqVYqLa8E/hNne0kJ+ns01ylHxp1v8/2/s+1IYv79m+o6pHz+ztMURv8dvITHuboRRuKvMPkPb8JI/7NAmBQ==
+  dependencies:
+    rison "^0.1.1"
 
 "@navikt/familie-backend@^5.0.30":
   version "5.0.30"

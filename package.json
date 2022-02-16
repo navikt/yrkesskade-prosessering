@@ -21,7 +21,7 @@
     ]
   },
   "dependencies": {
-    "@clickandmortar/kibana-url-builder": "^0.7.2",
+    "@lurajon/kibana-url-builder": "^0.7.2",
     "@navikt/familie-backend": "^5.0.30",
     "@navikt/familie-logging": "^1.0.5",
     "@navikt/familie-typer": "^3.0.14",
