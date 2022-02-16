@@ -11,11 +11,8 @@ import AvvikshåndteringModal from './AvvikshåndteringModal/AvvikshåndteringMo
 import TaskElement from './TaskElement';
 import { useTaskContext } from '../TaskProvider';
 import TaskLogg from './TaskLogg';
-import * as kub from '@clickandmortar/kibana-url-builder';
-import {
-    KibanaQueryFilter,
-    KibanaQueryPeriod,
-} from '@clickandmortar/kibana-url-builder/dist/types';
+import * as kub from '@lurajon/kibana-url-builder';
+import { KibanaQueryFilter, KibanaQueryPeriod } from '@lurajon/kibana-url-builder/dist/types';
 
 interface IProps {
     task: ITask;
