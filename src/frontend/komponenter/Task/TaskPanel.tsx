@@ -51,6 +51,7 @@ const TaskPanel: FC<IProps> = ({ task }) => {
 
     const kibanaErrorLenke = kub.buildDiscoverUrl({
         host: kibanaHost,
+        discoveryId: 'c95c83c0-8982-11ec-be50-97987d1e7a2e',
         columns,
         period,
         index,
