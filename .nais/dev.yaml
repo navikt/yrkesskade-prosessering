@@ -3,3 +3,4 @@ ingresses:
 env:
 - name: ENV
   value: "dev"
+tenant: trygdeetaten.no

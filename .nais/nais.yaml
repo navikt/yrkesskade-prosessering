@@ -34,6 +34,7 @@ spec:
       {{#each ingresses as |url|}}
         - {{url}}/auth/openid/callback
       {{/each}}
+      tenant: {{ tenant }}
   env:
   {{#each env}}
     - name: {{this.name }}
