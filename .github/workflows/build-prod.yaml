@@ -1,0 +1,36 @@
+name: Build
+on:
+  push:
+    branches:
+      - 'master'
+
+env:
+  "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
+
+jobs:
+  build:
+    name: Build and push Docker container
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: "Login to GitHub Docker Registry"
+        uses: "docker/login-action@v1"
+        with:
+          "registry": "ghcr.io"
+          "username": "${{ github.actor }}"
+          "password": "${{ secrets.GITHUB_TOKEN }}"
+      - name: "Build and push the Docker image"
+        run: "docker build --pull --tag ${IMAGE} . && docker push ${IMAGE}"
+  deployToDev:
+    name: "Deploy app to prod"
+    needs: "build"
+    runs-on: "ubuntu-18.04"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: "Deploy to Prod"
+        uses: "nais/deploy/actions/deploy@v1"
+        env:
+          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          "CLUSTER": "prod-gcp"
+          "RESOURCE": ".nais/nais.yaml"
+          "VARS": ".nais/prod.yaml"

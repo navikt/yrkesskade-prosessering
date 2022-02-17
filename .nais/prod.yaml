@@ -1,0 +1,5 @@
+ingresses:
+- "https://yrkesskade-prosessering.intern.nav.no"
+env:
+- name: ENV
+  value: "prod"

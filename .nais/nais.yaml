@@ -34,7 +34,6 @@ spec:
       {{#each ingresses as |url|}}
         - {{url}}/auth/openid/callback
       {{/each}}
-      tenant: trygdeetaten.no
   env:
   {{#each env}}
     - name: {{this.name }}
