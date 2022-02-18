@@ -46,17 +46,7 @@ const TaskPanel: FC<IProps> = ({ task }) => {
     ];
     const query = task.metadata.callId;
 
-    const kibanaErrorLenke = kub.buildDiscoverUrl({
-        host: kibanaHost,
-        discoveryId: 'c95c83c0-8982-11ec-be50-97987d1e7a2e',
-        columns,
-        period,
-        index,
-        filters: [...filters],
-        query,
-        refreshInterval: { pause: true, value: 0 as unknown as bigint },
-    });
-    //     `https://logs.adeo.no/app/kibana#/discover/c95c83c0-8982-11ec-be50-97987d1e7a2e?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-apps-*',key:team,negate:!f,params:(query:yrkesskade,type:phrase),type:phrase,value:yrkesskade),query:(match:(team:(query:yrkesskade,type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'c95c83c0-8982-11ec-be50-97987d1e7a2e',key:level,negate:!f,params:(query:Error,type:phrase),type:phrase,value:Error),query:(match:(level:(query:Error,type:phrase))))),index:'c95c83c0-8982-11ec-be50-97987d1e7a2e',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
+    const kibanaErrorLenke = `https://logs.adeo.no/app/discover#/view/c95c83c0-8982-11ec-be50-97987d1e7a2e?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:team,negate:!f,params:(query:yrkesskade),type:phrase),query:(match_phrase:(team:yrkesskade))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:level,negate:!f,params:(query:Error),type:phrase),query:(match_phrase:(level:Error)))),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
     const kibanaInfoLenke = `https://logs.adeo.no/app/discover#/view/c95c83c0-8982-11ec-be50-97987d1e7a2e?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:team,negate:!f,params:(query:yrkesskade),type:phrase),query:(match_phrase:(team:yrkesskade))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:level,negate:!f,params:(query:Info),type:phrase),query:(match_phrase:(level:Info)))),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
 
     const sistKjørt = getSistKjørt(task);
@@ -96,8 +86,8 @@ const TaskPanel: FC<IProps> = ({ task }) => {
             </div>
 
             <div className={'taskpanel__lenker'}>
-                <Lenke href={kibanaErrorLenke} children={'Kibana error'} />
-                <Lenke href={kibanaInfoLenke} children={'Kibana info'} />
+                <Lenke href={kibanaErrorLenke} children={'Kibana error'} target="_blank" />
+                <Lenke href={kibanaInfoLenke} children={'Kibana info'} target="_blank" />
                 <Lenke
                     href={''}
                     onClick={(event) => {
