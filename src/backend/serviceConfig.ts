@@ -13,8 +13,9 @@ if (process.env.ENV === 'local') {
         yrkesskade_mottak: 'http://localhost:9080',
     };
 } else {
+    const env = process.env.ENV == 'prod' ? '' : `.${process.env.ENV}`;
     proxyUrls = {
-        yrkesskade_mottak: `https://yrkesskade-melding-mottak.${process.env.ENV}.intern.nav.no`,
+        yrkesskade_mottak: `https://yrkesskade-melding-mottak${env}.intern.nav.no`,
     };
 }
 
