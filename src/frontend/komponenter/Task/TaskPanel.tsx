@@ -27,27 +27,10 @@ const TaskPanel: FC<IProps> = ({ task }) => {
     const [visAvvikshåndteringModal, settVisAvvikshåndteringModal] = useState(false);
     const [visLogg, settVisLogg] = useState(false);
 
-    const kibanaHost = 'https://logs.adeo.no/';
-    const columns = ['message', 'envclass', 'environment', 'level', 'application', 'host'];
-    const period: KibanaQueryPeriod = {
-        from: `${task.opprettetTidspunkt}`,
-        to: 'now',
-        mode: 'relative',
-    };
-    const index = 'logstash-apps-*';
-    const filters: KibanaQueryFilter[] = [
-        {
-            type: 'query',
-            field: 'team',
-            value: 'yrkesskade',
-            negate: false,
-            disabled: false,
-        },
-    ];
-    const query = task.metadata.callId;
-
-    const kibanaErrorLenke = `https://logs.adeo.no/app/discover#/view/c95c83c0-8982-11ec-be50-97987d1e7a2e?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:team,negate:!f,params:(query:yrkesskade),type:phrase),query:(match_phrase:(team:yrkesskade))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:level,negate:!f,params:(query:Error),type:phrase),query:(match_phrase:(level:Error)))),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
-    const kibanaInfoLenke = `https://logs.adeo.no/app/discover#/view/c95c83c0-8982-11ec-be50-97987d1e7a2e?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:team,negate:!f,params:(query:yrkesskade),type:phrase),query:(match_phrase:(team:yrkesskade))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:level,negate:!f,params:(query:Info),type:phrase),query:(match_phrase:(level:Info)))),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
+    const kibanaHost = 'logs.adeo.no';
+    const viewId = 'c95c83c0-8982-11ec-be50-97987d1e7a2e';
+    const kibanaErrorLenke = `https://${kibanaHost}/app/discover#/view/${viewId}?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:team,negate:!f,params:(query:yrkesskade),type:phrase),query:(match_phrase:(team:yrkesskade))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:level,negate:!f,params:(query:Error),type:phrase),query:(match_phrase:(level:Error)))),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
+    const kibanaInfoLenke = `https://${kibanaHost}/app/discover#/view/${viewId}?_g=(refreshInterval:(pause:!t,value:0),time:(from:'${task.opprettetTidspunkt}',mode:relative,to:now))&_a=(columns:!(message,envclass,environment,level,application,host),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:team,negate:!f,params:(query:yrkesskade),type:phrase),query:(match_phrase:(team:yrkesskade))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',key:level,negate:!f,params:(query:Info),type:phrase),query:(match_phrase:(level:Info)))),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:${task.metadata.callId}),sort:!('@timestamp',desc))`;
 
     const sistKjørt = getSistKjørt(task);
 
