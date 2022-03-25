@@ -47,11 +47,12 @@ Appen bygges på github actions. Alle commits til feature brancher går automati
 Hemmeligheter for appen ligger i etcd i kubernetes.
 
 # Henvendelser
+Enten:
+Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
 
-Spørsmål knyttet til koden eller prosjektet kan rettes til:
-
-* Henning Håkonsen, `henning.hakonsen@nav.no`
+Eller:
+Spørsmål knyttet til koden eller prosjektet kan stilles til yrkesskade@nav.no
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #team-familie.
+Interne henvendelser kan sendes via Slack i kanalen #team-yrkesskade.
