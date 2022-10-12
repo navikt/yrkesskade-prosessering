@@ -1,3 +1,5 @@
+Dette repoet er flyttet til https://github.com/navikt/yrkesskade
+
 # yrkesskade-proessering
 
 Frontend applikasjon for monitorering og håndtering av prosesstasks for familieområdet
